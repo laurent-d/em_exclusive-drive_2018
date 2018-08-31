@@ -668,6 +668,14 @@ js src: none
         {% endif %}
 
 
+        {% if guest.guest_metadata.nb_pilotes == "" and guest.guest_metadata.nb_accompagnants == "" %}
+          <script>console.log("vers roulage")</script>
+        {% elsif guest.guest_metadata.nb_accompagnants == "" %}
+          <script>console.log("vers pilotes add")</script>
+        {% else %}
+          <script>console.log("vers acoompagnant")</script>
+        {% endif %}
+
           {% if higherStep == 'activites' %}
             {% guest_field higher_step "Étape la plus haute", type: hidden, value: "planning_pilote_principal" %}
           {% endif %}
