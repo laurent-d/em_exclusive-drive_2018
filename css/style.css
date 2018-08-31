@@ -1,0 +1,770 @@
+/* Debut 16:45 */
+
+/* Fin 17:28 */
+
+@import "https://fonts.googleapis.com/css?family=Montserrat:700%7CLato:300,400%7COpen+Sans:400";
+body {
+  position: relative;
+  z-index: 100;
+  background-color: #f5f5f5;
+  padding: 0;
+  line-height: 23px;
+  overflow-y: scroll;
+  overflow-x: hidden !important;
+  -webkit-font-smoothing: antialiased;
+  /* font-family: 'Montserrat', sans-serif; */
+  font-family: "Lato", sans-serif;
+  color: #222222;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.with-max-width {
+  margin-top: 0;
+  background-color: inherit;
+  border: #ddd 0px solid;
+  position: relative;
+  font-size: 16px;
+  width: 100%;
+}
+
+label, input, button, select, textarea {
+  font-size: 16px;
+  font-weight: normal;
+  /* line-height: 20px; */
+}
+
+#activites .check-in-point-price,
+#planning_pilote_principal .check-in-point-price,
+#planning_pilotes_additionnels .check-in-point-price,
+#planning_accompagnants .check-in-point-price,
+#planning_sessions_roulage .check-in-point-price {
+  display:none;
+}
+.assurance  .check-in-point-price {
+  display: inline!important;
+}
+
+@media only screen and (min-width: 980px) {}
+
+.with-max-width {
+  margin-top: 0;
+  max-width: auto;
+  background-color: inherit;
+  border: #ddd 0px solid;
+}
+
+.header-banner {
+  background-color: black;
+}
+
+.banner-form {
+  margin: 0px auto;
+  display: block;
+  width: 500px;
+  padding-bottom: 0px;
+}
+
+.with-max-width .registration-form .form-actions {
+  background-color: inherit;
+}
+
+#myTab {
+  margin: 0 auto;
+  position: relative;
+  z-index: 20;
+  max-width: 100%;
+  background-color: white;
+  top: 0;
+  margin-top: -24px;
+  text-align: center;
+  display: block;
+  border-bottom: 4px solid;
+  font-size: 0;
+  margin-bottom: 32px;
+}
+
+.tab-content, .caddie-container  {
+  width: 1100px;
+  margin: 0 auto;
+  z-index: 20;
+  max-width: 100%;
+  padding-bottom: 2.5em;
+}
+
+
+@media only screen and (max-width: 1200px) {
+  .tab-content, .caddie-container {
+    width: 950px;
+  }
+}
+
+@media only screen and (max-width:1000px) {
+  .tab-content, .caddie-container  {
+    width: 768px;
+    width: 100%;
+  }
+}
+
+h1 {
+  font-size: 40px;
+  line-height: 32px;
+  font-style: normal;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+h3 {
+  font-size: 18px;
+  line-height: 1.4444444444444em;
+  letter-spacing: 1px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.tc {
+  text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 32px;
+  font-style: normal;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 0;
+}
+
+#inscription h1 {
+  font-size: 40px;
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 0;
+}
+
+h1, h1 a, h2, h2 a, h3, h3 a {
+  color: #222222;
+  font-family: 'Montserrat', sans-serif;
+}
+
+h4 {
+  font-size: 18px;
+  line-height: 24px;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0px;
+  text-transform: uppercase;
+}
+
+h4, h4 a {
+  color: #222222;
+}
+
+h6 {
+  font-size: 13px;
+  line-height: 16px;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0px;
+  text-transform: none;
+}
+
+p {
+  font-family: "Lato", sans-serif;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0px;
+  font-weight: 400;
+  font-style: normal;
+  text-transform: none;
+  color: #222222;
+  margin-top: 10px;
+  margin-bottom: 10px
+}
+
+.maauto {
+  margin: 0 auto;
+  float: none !important;
+}
+
+h6, h6 a, h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover, a, p a, header:not(.with_hover_bg_color) nav.main_menu>ul>li:hover>a, nav.main_menu>ul>li.active>a, .drop_down .second .inner>ul>li>a:hover, .drop_down .second .inner ul li.sub ul li a:hover, nav.mobile_menu ul li a:hover, nav.mobile_menu ul li.active>a, .side_menu_button>a:hover, .mobile_menu_button span:hover, .vertical_menu ul li a:hover, .vertical_menu_toggle .second .inner ul li a:hover, nav.popup_menu ul li a:hover, nav.popup_menu ul li ul li a, .blog_holder article.sticky .post_text h3 a, .blog_holder.masonry article.sticky .post_text h5 a, .blog_holder.masonry_full_width article.sticky .post_text h5 a, .blog_holder article .post_info, .blog_holder article .post_info a, .blog_holder article .post_text a.more-link:hover span, .blog_holder article .post_description a:hover, .blog_holder article .post_description .post_comments:hover, .blog_holder.masonry article.format-quote .post_text_inner:hover .qoute_mark, .blog_holder.masonry article.format-link .post_text .post_text_inner:hover .link_mark, .blog_holder.masonry_full_width article.format-quote .post_text .post_text_inner:hover .qoute_mark, .blog_holder.masonry_full_width article.format-link .post_text .post_text_inner:hover .link_mark, .blog_holder article.format-link .post_text .post_text_inner:hover .post_social .post_comments i, .blog_holder article.format-link .post_text .post_text_inner:hover .post_social .blog_like i, .blog_holder article.format-link .post_text .post_text_inner:hover .post_social .social_share_holder>a>i, .blog_holder article.format-quote .post_text .post_text_inner:hover .post_social .post_comments i, .blog_holder article.format-quote .post_text .post_text_inner:hover .post_social .blog_like i, .blog_holder article.format-quote .post_text .post_text_inner:hover .post_social .social_share_holder>a>i, .comment_holder .comment .text .comment_date, .comment_holder .comment .text .replay, .comment_holder .comment .text .comment-reply-link, div.comment_form form p.logged-in-as a, .blog_holder.masonry .post_author:hover, .blog_holder.masonry .post_author a:hover, .blog_holder.masonry_full_width .post_author:hover, .blog_holder.masonry_full_width .post_author a:hover, .blog_holder.masonry article .post_info a:hover, .blog_holder.masonry_full_width article .post_info a:hover, .blog_holder.masonry article h4 a:hover, .blog_holder.masonry_full_width article h4 a:hover, .latest_post_holder .latest_post_title a:hover, .latest_post_holder .post_info_section:before, .latest_post_holder .post_info_section span, .latest_post_holder .post_info_section a, .latest_post_holder .post_author a.post_author_link:hover, .projects_holder article .portfolio_title a:hover, .filter_holder ul li.current span, .filter_holder ul li:not(.filter_title):hover span, .q_accordion_holder.accordion .ui-accordion-header .accordion_mark_icon, blockquote.with_quote_icon i, blockquote h3, .q_dropcap, .price_in_table .value, .price_in_table .price, .q_font_elegant_holder.q_icon_shortcode:hover, .q_font_awsome_icon_holder.q_icon_shortcode:hover, .q_icon_with_title.normal_icon .icon_holder:hover .icon_text_icon, .box_holder_icon_inner.normal_icon .icon_holder_inner:hover .icon_text_icon, .q_progress_bars_icons_inner.square .bar.active i, .q_progress_bars_icons_inner.circle .bar.active i, .q_progress_bars_icons_inner.normal .bar.active i, .q_progress_bars_icons_inner .bar.active i.fa-circle, .q_progress_bars_icons_inner.square .bar.active .q_font_elegant_icon, .q_progress_bars_icons_inner.circle .bar.active .q_font_elegant_icon, .q_progress_bars_icons_inner.normal .bar.active .q_font_elegant_icon, .q_social_icon_holder.normal_social .simple_social, .q_social_icon_holder.normal_social.with_link .simple_social, .q_list.number ul>li:before, .social_share_list_holder ul li i:hover, .q_progress_bar .progress_number, .qbutton:hover, .load_more a:hover, .blog_load_more_button a:hover, #submit_comment:hover, .drop_down .wide .second ul li .qbutton:hover, .drop_down .wide .second ul li ul li .qbutton:hover, nav.content_menu ul li.active:hover i, nav.content_menu ul li:hover i, nav.content_menu ul li.active:hover a, nav.content_menu ul li:hover a, aside.sidebar .widget:not(.woocommerce) li, .header-widget.widget_nav_menu ul.menu li a:hover, input.wpcf7-form-control.wpcf7-submit:not([disabled]):hover, .gform_wrapper input[type=button]:hover, .gform_wrapper input[type=submit]:hover, .vc_grid-container .vc_grid-filter.vc_grid-filter-color-grey>.vc_grid-filter-item:hover span, .vc_grid-container .vc_grid-filter.vc_grid-filter-color-grey>.vc_grid-filter-item.vc_active span, .qode_twitter_widget li .tweet_icon_holder .social_twitter, .blog_holder.blog_chequered article .qodef-post-title .time, .blog_holder.blog_chequered article.qodef-with-bg-color .qodef-post-title a:hover, .portfolio_single .fullscreen-slider .qodef-portfolio-slider-content .qodef-control {
+  color: #e00a1d;
+}
+
+.btn-large {
+  color: #ffffff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-width: 0px;
+  border-radius: 0px !important;
+  -moz-border-radius: 0px !important;
+  -webkit-border-radius: 0px !important;
+  background-color: #e00a1d;
+  height: 45px !important;
+  line-height: 45px !important;
+  position: relative;
+  display: inline-block;
+  width: auto;
+  height: 37px;
+  line-height: 37px;
+  margin: 0;
+  padding: 0 22px;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: inherit;
+  text-align: left;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  font-style: normal;
+  text-transform: uppercase;
+  text-shadow: none;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  border-radius: 0 !important;
+  -webkit-transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
+  -moz-transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
+  -ms-transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
+  -o-transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
+  transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
+  -webkit-box-sizing: initial !important;
+  -moz-box-sizing: initial !important;
+  box-sizing: initial !important;
+  min-width: 150px;
+  text-align: center;
+}
+
+.btn.active, .btn:active {
+    background-image: none;
+    outline: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.btn-link, .btn-link:link, .btn-link:focus, .btn-link:hover, .btn-link:active, .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .btn-primary.disabled, .btn-primary[disabled] {
+  color: white;
+  cursor: pointer;
+  border-color: transparent;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  outline-color: transparent;
+}
+
+.btn-primary{
+  -webkit-transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
+  -moz-transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
+  -ms-transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
+  -o-transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
+  transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-large:hover{
+color: #ffffff;
+background-color: #bc0012;
+}
+
+.btn-primary:active, .btn-primary.active, .btn-primary.disabled, .btn-primary[disabled] {
+   color: #fff;
+   background-color: #e00a1d;
+}
+
+
+
+.btn:focus {
+    outline: none;
+    outline: none;
+    outline-offset: 0;
+}
+
+.btn-back, .btn-back:hover, .btn-back:focus, .btn-back:active, .btn-back.active, .btn-back.disabled, .btn-back[disabled] {
+  color: black;
+  background-color: transparent;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+::selection {
+  background: #e00a1d;
+  color: white;
+}
+
+/* Webkit */
+
+::selection {
+  background: #e00a1d;
+  color: white;
+}
+
+/* Gecko/Mozilla */
+
+::-moz-selection {
+  background: #e00a1d;
+  color: white;
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+  display: inline-block;
+  padding: 4px 6px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #555;
+  vertical-align: middle;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 0px;
+}
+
+[id^="l-inked-person-"], .span4 {
+  background-color: white;
+  margin: 40px 0;
+  /* padding: 45px 0; */
+}
+
+[id^="linked-person-"] {
+  background-color: white;
+  width: 100%;
+  padding: 1.5em 2.5em;
+  box-sizing: border-box;
+  margin-bottom: 3em;
+  box-sizing: border-box;
+}
+
+[id^="linked-person-"] h2 {
+  color: #e00a1d;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#linked-person-0 {
+  margin-top: 2em;
+}
+
+.red {
+  color: #e00a1d;
+}
+
+.day {
+  border-top: 1px solid #d0cdcd;
+  padding-top: 1em;
+}
+
+/*.day + .day{
+  border-top: 1px solid;
+  padding-top: 1em;
+}*/
+
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  display: block;
+}
+
+@media (min-width: 980px) {
+  .with-max-width .registration-form fieldset {
+    padding: 0;
+  }
+}
+
+@media only screen and (min-width: 980px) {
+  .with-max-width h1 {
+    padding: 0;
+  }
+}
+
+.btn-large+.btn-large {
+  margin-left: 20%
+}
+
+.so, .mt, .am {
+  float: left;
+  /*width: 33.33%;*/
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+.matin, .apres-midi, .soiree {
+  float: left;
+  margin-bottom: 1.5em;
+}
+
+
+.capacity-reached .name {
+    text-decoration: line-through;
+}
+
+.first div {
+  float: left;
+  margin-right: 10px;
+}
+
+[data] label.checkbox {
+  min-width: 45px;
+  margin-bottom: 0;
+  line-height: unset;
+  background-color: white;
+  vertical-align: middle;
+  padding: .5em 1em;
+  margin-top: 1em;
+  line-height: 1.5;
+  border:1px solid #df091d;
+  -webkit-transition: color .2s ease-in-out, background-color .2s ease-in-out, border-color .2s ease-in-out;
+  -moz-transition: color .2s ease-in-out, background-color .2s ease-in-out, border-color .2s ease-in-out;
+  -ms-transition: color .2s ease-in-out, background-color .2s ease-in-out, border-color .2s ease-in-out;
+  -o-transition: color .2s ease-in-out, background-color .2s ease-in-out, border-color .2s ease-in-out;
+  transition: color .2s ease-in-out, background-color .2s ease-in-out, border-color .2s ease-in-out;
+  cursor: pointer;
+}
+
+
+[data] input {
+  position: absolute;
+  left: -9999px;
+  cursor: pointer;
+}
+
+[data] label {
+ cursor: pointer;
+}
+
+/* [data] label.checkbox:hover, input:focus + label {
+  background-color: #df091d;
+  color:white;
+} */
+
+[data] label.checkbox.capacity-reached:hover, [data] label.checkbox.capacity-reached {
+  background-color: white;
+  color:black;
+  cursor:not-allowed;
+  opacity:.5;
+}
+
+
+[data] label.checked {
+  background-color: #df091d;
+  color:white;
+  cursor: pointer;
+}
+
+input:checked + label::before {
+  background-color: #fff;
+}
+
+.matin >div, .apres-midi>div, .soiree>div {
+  float: none !important;
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.matin > span, .apres-midi> span, .soiree>span {
+display:block;
+margin-bottom: .5em;
+font-weight:800;
+}
+
+
+.form-horizontal .controls {
+  margin-left: 0;
+  clear: both;
+}
+
+.w50 {
+  width: 50%;
+}
+
+.w40 {
+  width: 40%;
+}
+
+.w25 {
+  width: 25%;
+}
+
+.w33 {
+    width: 33%;
+    background-color: white;
+    margin-bottom: 3.33333%;
+    display: inline-block;
+    float: none!important;
+    vertical-align: top;
+}
+
+.w75 {
+  width: 75%;
+}
+
+.w50, .w40, .w25, .w33, .w75 {
+  float: left;
+  box-sizing: border-box;
+}
+
+.mw80{
+  max-width: 80%;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.pa1 {
+  padding: 1.5em 2.5em;
+}
+
+.pv1 {
+  padding: 1.5em auto;
+}
+
+.ph1 {
+  padding: 0 2.5em;
+}
+
+.ph2 {
+  padding: 0 2em;
+}
+
+.pl1 {
+  padding-left: 1em;
+}
+
+.pr1 {
+  padding-right: 1em;
+}
+
+.pt1 {
+  padding-top: 1em;
+}
+
+.pb1 {
+  padding-bottom: 1em;
+}
+
+.mb1 {
+  margin-bottom: 1em;
+}
+
+.mb2 {
+  margin-bottom: 2em;
+}
+
+#inscription-form .form-horizontal .control-label {
+  float: left;
+  width: auto !important;
+  padding-top: 5px;
+  text-align: right;
+}
+
+#inscription-form .form-horizontal .controls {
+  margin-left: 0;
+}
+
+#inscription-form label.checkbox {
+  display: inline-block;
+  margin-right: 2em;
+}
+
+#inscription-form span p {
+  font-size: 12px !important;
+  margin-top: -15px;
+  color: #e00a1d;
+}
+
+hr {
+  width: 100%;
+}
+
+#inscription-form select {
+  width: 10em;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 0;
+  display: inline-block;
+}
+
+#inscription-form .control-group .control-label {
+  display: inline-block;
+  margin-right: 2em;
+  width: auto;
+}
+
+#inscription-form .inline .control-group .control-label select {
+  display: inline-block;
+  margin-right: 2em;
+  width: 5em;
+}
+
+#inscription-form .inline .controls {
+  margin-left: 0;
+  clear: initial;
+}
+
+.nav-tabs {
+  border-bottom: 0px solid #ddd;
+}
+
+.info {
+  line-height: 1.25;
+  color: #e00a1d;
+  display: block;
+  margin-bottom: 20px;
+  font-size: .8em;
+}
+
+.form-horizontal .control-group+.info {
+  margin-top: -1.5em;
+}
+
+.inscription .caddie-container.js {
+  display: none;
+}
+
+.w25+.w75 {
+  /* border-left: 1px solid; */
+  padding-left: 2%;
+}
+
+.info-pilote .control-group {
+  width: auto;
+  float: left;
+  margin-right: 1.5em;
+}
+
+.inner-box {
+  padding: 1em 0;
+}
+
+.nav-tabs {
+  border: 0;
+}
+
+.nav-tabs>li {
+  margin-bottom: -1px;
+  display: inline-block;
+  float: none;
+  margin: 0 -1px;
+}
+
+.nav-tabs>li>a {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  line-height: 20px;
+  border: 0px solid transparent;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  border-bottom: 4px solid #000000;
+  margin-bottom: -4px;
+  color: black !important;
+}
+
+.nav-tabs>li>a:hover, .nav-tabs>li>a:focus {
+  border-color: black
+}
+
+.nav-tabs>.disabled>a:hover, .nav-tabs>.disabled>a:focus {
+  border-color: black
+}
+
+.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
+  color: #e00a1d !important;
+  cursor: default;
+  background-color: #fff;
+  border: 0px solid #ddd;
+  border-bottom-color: transparent;
+  color: #e00a1d;
+  border-bottom: 4px solid #e00a1d;
+  font-weight: 800;
+}
+
+.form-horizontal .control-label {
+  float: left;
+  width: 160px;
+  padding-top: 5px;
+  text-align: left;
+}
+
+@media screen and (max-width: 640px) {
+
+  h1, #inscription h1{
+  font-size:35px;
+  }
+
+  .w50, .w40, .w25, .w33, .w75 {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  #myTab {
+    display: none;
+  }
+  .pa1 {
+    padding: 1.5em 1.5em;
+  }
+  #inscription-form .control-group .control-label {
+    display: inline-block;
+    margin-right: 0;
+    width: auto;
+  }
+  #inscription-form select {
+    width: 100%;
+  }
+  .info-pilote .control-group {
+    width: 100%;
+    margin-right: 0;
+  }
+  .btn-large+.btn-large {
+    margin-left: 0;
+    margin-top: 2em;
+}
+}
+
+  select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    display: block;
+    box-sizing: border-box;
+    height: auto;
+  }
+  .caddie-container {
+    float: none;
+    margin-top: 0;
+    padding:2.5em;
+    box-sizing: border-box;
+  }
+
+  .remove-linked-guest{
+    display: none;
+  }
+
+.incl .check-in-point-price:after {
+  content: 'Inclus';
+  padding-top: 0em;
+  padding-right: 0.4em;
+  padding-bottom: 0.2em;
+  padding-left: 0.4em;
+background-color: black;
+/* border-radius: .2em; */
+margin-left: .5em;
+color: white;
+font-style: initial;
+}
+.excl .check-in-point-price:after {
+  content: 'En option';
+  padding-top: 0em;
+  padding-right: 0.4em;
+  padding-bottom: 0.2em;
+  padding-left: 0.4em;
+  background-color: #e00a1d;
+  /* border-radius: .2em; */
+  margin-left: .5em;
+  color: white;
+  font-style: initial;
+}
+
+.media h4 {
+  margin: 0
+}
