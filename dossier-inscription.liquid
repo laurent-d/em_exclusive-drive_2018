@@ -662,11 +662,10 @@ js src: none
         {% if guest.guest_metadata.nb_pilotes == "" and guest.guest_metadata.nb_accompagnants == "" %}
           {% redirect_with "etape", "planning_sessions_roulage" %}
         {% elsif guest.guest_metadata.nb_accompagnants == "" %}
-          {% redirect_with "etape", "planning_accompagnants" %}
-        {% else %}
           {% redirect_with "etape", "planning_pilotes_additionnels" %}
+        {% else %}
+          {% redirect_with "etape", "planning_accompagnants" %}
         {% endif %}
-
 
 
           {% if higherStep == 'activites' %}
@@ -684,7 +683,8 @@ js src: none
 
             <fieldset>
               {% foreach_linked_guest default_nb: 0 , guest_category_id: categories.first, add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
-                <h2>{{linked_guest.guest_category.name}} #1 : {{linked_guest.identity}}</h2>
+                <h2>{{linked_guest.guest_category.name}} Principal</h2>
+                {% comment %}<h2>{{linked_guest.guest_category.name}} #{{linked_guest_index}} {% if category_index == 0 %}: {{linked_guest.identity}} {% endif %}</h2>{% endcomment %}
 
                 {% assign activite = "" %}
 
