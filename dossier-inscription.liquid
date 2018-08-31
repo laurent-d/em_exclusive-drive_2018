@@ -150,13 +150,13 @@ js src: none
       {% assign categories = "5b32597f07e935001e0041d1,5b3390f77ae1c3001e000089,5b338f61ed9cd5001f000289,5b852e4ab525cb001e00751e" | split: "," %}
       {% assign category_names = "Pilote Principal,Accompagnant Pilote,Accompagnant,Accompagnant de moins de 16 ans" | split: "," %}
 
-      <script type="text/javascript">
+      <!-- <script type="text/javascript">
       var nb_pilotes = "{% if guest.guest_metadata.nb_pilotes != "" %} {{guest.guest_metadata.nb_pilotes}} Pilotes Supp{% endif%}";
       var nb_accompagnants = "{% if guest.guest_metadata.nb_accompagnants != "" %} {{guest.guest_metadata.nb_accompagnants}} Accompagnants Non Mineurs{% endif%}";
       var nb_accompagnants_mineurs = "{% if guest.guest_metadata.nb_accompagnants_mineurs != "" %} {{guest.guest_metadata.nb_accompagnants_mineurs}} Accompagnants Mineurs{% endif%}";
       console.log(nb_pilotes + "\n" + nb_accompagnants + "\n" +nb_accompagnants_mineurs);
       console.log("{{ guest.guest_metadata.nb_accompagnants_mineurs }}");
-      </script>
+      </script> -->
 
       {% comment %}
         {% if guest.guest_metadata.nb_pilotes != "" %} {{guest.guest_metadata.nb_pilotes}} Pilote(s) {% endif%}
