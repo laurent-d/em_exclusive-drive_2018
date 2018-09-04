@@ -1,0 +1,14 @@
+.media .span2 {
+    overflow: hidden;
+}
+
+.media .media-object {
+    transform: scale(1);
+    -webkit-transition: transform .3s ease-out;
+    -moz-transition: opacity .3s cubic-bezier(.645, .045, .355, 1), transform .5s ease-out;
+    transition: transform .3s ease-out;
+}
+
+.media:hover .media-object {
+    transform: scale(1.2);
+}

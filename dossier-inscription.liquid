@@ -1,8 +1,8 @@
-{% comment %}
+<!--
 liquid src: https://applidget.github.io/vx-assets/orgs/exclusive-drive/2018/billetterie-exclusive-drive/liquid/dossier-inscription.liquid
 css src: https://applidget.github.io/vx-assets/orgs/exclusive-drive/2018/billetterie-exclusive-drive/css/style.css
 js src: none
-{% endcomment %}
+-->
 
 <!DOCTYPE html>
 <html>
@@ -115,7 +115,7 @@ js src: none
       }
     </style>
     <!-- <link rel="stylesheet" type="text/css" href="https://applidget.github.io/vx-assets/orgs/exclusive-drive/2018/billetterie-exclusive-drive/css/style.css" /> -->
-    <link rel="stylesheet" type="text/css" href="https://laurent-d.github.io/em_exclusive-drive_2018/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="https://60b14107.ngrok.io/css/style.css" />
   </head>
   <body>
     <div class="header-banner">
@@ -173,11 +173,12 @@ js src: none
         <li class="{% if url_params.etape == 'activites' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 3", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li>
         <li class="{% if url_params.etape == 'planning_pilote_principal' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 4", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li>
         {% unless url_params.etape == 'inscription' or url_params.etape == nil %}
-        {% if guest.guest_metadata.nb_pilotes != ""  %} <li class="{% if url_params.etape == 'planning_pilotes_additionnels' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 5", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li> {% endif%}
-        {% if guest.guest_metadata.nb_accompagnants != "" %} <li class="{% if url_params.etape == 'planning_accompagnants' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 6", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li> {% endif%}
+          {% if guest.guest_metadata.nb_pilotes != ""  %} <li class="{% if url_params.etape == 'planning_pilotes_additionnels' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 5", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li> {% endif%}
+          {% if guest.guest_metadata.nb_accompagnants != "" %} <li class="{% if url_params.etape == 'planning_accompagnants' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 6", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li> {% endif%}
         {% endunless %}
         <li class="{% if url_params.etape == 'planning_sessions_roulage' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 7", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li>
-        <li class="{% if url_params.etape == 'recapitulatif' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 8", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li>
+        <li class="{% if url_params.etape == 'moniteur' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 8", priority: 84 %}Moniteurs{% endeditable_text %}</a></li>
+        <li class="{% if url_params.etape == 'recapitulatif' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 9", priority: 84 %}Récapitulatif{% endeditable_text %}</a></li>
       </ul>
 
       <div class="tab-content">
@@ -280,7 +281,6 @@ js src: none
                   {% foreach_linked_guest default_nb: default_nb , guest_category_id: category, add: 0, add_label: "Ajouter un participant", remove: 1, remove_label: "Retirer le participant", limit: 20 %}
 
                     {% assign linked_guest_index = linked_guest_index | plus:1 %}
-
 
                     <h2>{{category_names[category_index]}} {% if category_index > 0 %}#{{linked_guest_index}}{% endif %}</h2>
                     {% if category_index <= 1 %}
@@ -516,6 +516,18 @@ js src: none
                           <p>Stage de pilotage sur le circuit Bugatti <br>
                             Session de 30 mn : 15 mn de briefing + 15 mn de roulage avec un coach
                             Accès à EXCLUSIVE DRIVE : entrée et parking offerts ! Se présenter impérativement 15 minutes avant le début de son stage</p>
+
+                            <div class="media">
+                              <div class="pull-left span2">
+                                <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/LamborghiniHuracan.jpg">
+                              </div>
+                              <div class="media-body">
+                                <div class="media">
+                                  {% guest_checkbox_field stage_bugatti_lamborghini "<h4>Stage de pilotage Lamborghini Huracan Performante</h4> V10 / 5,2L 640cv - Boîte double embrayage 7 rapports - 1382 kg - 0 à 100 km/h en 2,9 sec - Une occasion unique de piloter une voiture d'exception sur le Bugatti, inoubliable ! - <em>399,00 EUR TTC</em>" %}
+                                </div>
+                              </div>
+                            </div>
+
                           <div class="media">
                             <div class="pull-left span2">
                               <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/AlpineA110.jpg">
@@ -527,16 +539,8 @@ js src: none
                             </div>
                           </div>
 
-                          <div class="media">
-                            <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/LamborghiniHuracan.jpg">
-                            </div>
-                            <div class="media-body">
-                              <div class="media">
-                                {% guest_checkbox_field stage_bugatti_lamborghini "<h4>Stage de pilotage Lamborghini Huracan Performante</h4> V10 / 5,2L 640cv - Boîte double embrayage 7 rapports - 1382 kg - 0 à 100 km/h en 2,9 sec - Une occasion unique de piloter une voiture d'exception sur le Bugatti, inoubliable ! - <em>399,00 EUR TTC</em>" %}
-                              </div>
-                            </div>
-                          </div>
+                        </div>
+                      </div>
 
                       <div class="w100">
                         <div class="inner-box clearfix">
@@ -552,7 +556,7 @@ js src: none
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field stage_maison_blanche_ferrari "<h4>Stage de pilotage FERRARI 458 spéciale</h4>V8 / 4,5L 605cv - Boîte double embrayage 7 rapports - 1395 kg - 0 à 100 km/h en 3 sec - Pneus semi-slick - Pilotez le mythe Ferrari au Mans! - <em>299,00 EUR TTC</em>"  %}
+                                {% guest_checkbox_field stage_maison_blanche_ferrari "<h4>Stage de pilotage FERRARI 458 Spéciale</h4>V8 / 4,5L 605cv - Boîte double embrayage 7 rapports - 1395 kg - 0 à 100 km/h en 3 sec - Pneus semi-slick - Pilotez le mythe Ferrari au Mans! - <em>299,00 EUR TTC</em>"  %}
                               </div>
                             </div>
                           </div>
@@ -570,11 +574,11 @@ js src: none
 
                           <div class="media">
                             <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/KTM-X-Bow-RR.jpg">
+                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/AudiR8GT.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field stage_maison_blanche_ktm "<h4>Stage de pilotage KTM XBOW R</h4> 4 Cyl / 2,0L 300cv - Boîte manuelle 6 rapports - 800 kg - 0 à 100 km/h en 3,9 sec - Pneus semi-slick - Une machine à sensations fortes et directs ! - <em>239,00 EUR TTC</em>"   %}
+                                {% guest_checkbox_field stage_maison_blanche_audi "<h4>Stage de pilotage AUDI R8 GT</h4> V10 / 5,2L 580cv - Boîte séquentielle 6 rapports - 1525 kg - 0 à 100 km/h en 3,6 sec - Pilotez l'Audi la plus pistarde au Mans ! - <em>279,00 EUR TTC</em>"   %}
                               </div>
                             </div>
                           </div>
@@ -592,14 +596,29 @@ js src: none
 
                           <div class="media">
                             <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/AudiR8GT.jpg">
+                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/KTM-X-Bow-RR.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field stage_maison_blanche_audi "<h4>Stage de pilotage AUDI R8 GT</h4> V10 / 5,2L 580cv - Boîte séquentielle 6 rapports - 1525 kg - 0 à 100 km/h en 3,6 sec - Pilotez l'Audi la plus pistarde au Mans ! - <em>279,00 EUR TTC</em>"   %}
+                                {% guest_checkbox_field stage_maison_blanche_ktm "<h4>Stage de pilotage KTM XBOW R</h4> 4 Cyl / 2,0L 300cv - Boîte manuelle 6 rapports - 800 kg - 0 à 100 km/h en 3,9 sec - Pneus semi-slick - Une machine à sensations fortes et directs ! - <em>239,00 EUR TTC</em>"   %}
                               </div>
                             </div>
                           </div>
+
+                          <!-- ADD Megane 4 RS -->
+                          <div class="media">
+                            <div class="pull-left span2">
+                              <img class="media-object" src="https://60b14107.ngrok.io/img/Megane4RS.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field stage_maison_blanche_renault "<h4>Stage de pilotage RENAULT MEGANE 4 RS</h4>4 Cyl / 2,0L 280cv - Boîte double embrayage 6 rapports - 1430 kg - 0 à 100 km/h en 5,9 sec - La plus méchante de toutes les Meganes jamais produite - <em>199,00 EUR TTC</em>"  %}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- ADD Megane 4 RS -->
+
+
 
                           <!-- </div> -->
                         </div>
@@ -641,8 +660,8 @@ js src: none
                         </div>
                       {% endif %}
                     </div>
-                  </div>
-                  </div>
+                  <!-- </div>
+                  </div> -->
                   {% endforeach_linked_guest %}
                 {% endif %}
               {% endfor %}
@@ -660,18 +679,18 @@ js src: none
         {% if guest.guest_metadata.nb_pilotes == "" and guest.guest_metadata.nb_accompagnants == "" %}
           {% redirect_with "etape", "planning_sessions_roulage" %}
         {% elsif guest.guest_metadata.nb_accompagnants == "" %}
-          {% redirect_with "etape", "planning_pilotes_additionnels" %}
-        {% else %}
           {% redirect_with "etape", "planning_accompagnants" %}
+        {% else %}
+          {% redirect_with "etape", "planning_pilotes_additionnels" %}
         {% endif %}
 
 
         {% if guest.guest_metadata.nb_pilotes == "" and guest.guest_metadata.nb_accompagnants == "" %}
           <script>console.log("vers roulage")</script>
         {% elsif guest.guest_metadata.nb_accompagnants == "" %}
-          <script>console.log("vers pilotes add")</script>
+          <script>console.log("vers accompagnants")</script>
         {% else %}
-          <script>console.log("vers acompagnant")</script>
+          <script>console.log("vers pilotes add")</script>
         {% endif %}
 
           {% if higherStep == 'activites' %}
@@ -704,6 +723,7 @@ js src: none
                 {% if linked_guest.guest_metadata.stage_maison_blanche_ktm == "1" %} {% assign activite = activite | append:"stage_maison_blanche_ktm "%} {% endif%}
                 {% if linked_guest.guest_metadata.stage_maison_blanche_lotus == "1" %} {% assign activite = activite | append:"stage_maison_blanche_lotus "%} {% endif%}
                 {% if linked_guest.guest_metadata.stage_maison_blanche_audi == "1" %} {% assign activite = activite | append:"stage_maison_blanche_audi "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_renault == "1" %} {% assign activite = activite | append:"stage_maison_blanche_renault "%} {% endif%}
                 {% if linked_guest.guest_metadata.course_kart == "1" %} {% assign activite = activite | append:"course_kart "%} {% endif%}
                 {% if linked_guest.guest_metadata.concours_elegance == "1" %} {% assign activite = activite | append:"stage_maison_blanche_porsche "%} {% endif%}
 
@@ -755,11 +775,11 @@ js src: none
 
         {% elsif url_params.etape == "planning_pilotes_additionnels" %}
 
-        {% if guest.guest_metadata.nb_accompagnants == "" %}
-          {% redirect_with "etape", "planning_sessions_roulage" %}
-        {% else %}
-          {% redirect_with "etape", "planning_accompagnants" %}
-        {% endif %}
+          {% if guest.guest_metadata.nb_accompagnants == "" %}
+            {% redirect_with "etape", "planning_sessions_roulage" %}
+          {% else %}
+            {% redirect_with "etape", "planning_accompagnants" %}
+          {% endif %}
 
           {% comment %}{% redirect_with "etape", "planning_accompagnants" %}{% endcomment %}
 
@@ -953,7 +973,7 @@ js src: none
                     <div class="controls">
                       {% for point in sorted_checkin_points %}
                         {% if point.traits.jour == day and point.traits.type == "assurance" %}
-                          {% checkin_point point.id, label: point.traits.label, checked:true %}
+                          {% checkin_point point.id, label: point.traits.label %}
                         {% endif %}
                       {% endfor %}
                     </div>
@@ -973,7 +993,7 @@ js src: none
                           {% endif %}
                         {% endfor %}
                       </div>
-                      <div class="first">
+                      <div>
                         {% for point in sorted_checkin_points %}
 
                           {% assign val = point.traits.heure | remove: "h" %}
@@ -988,7 +1008,8 @@ js src: none
                             {% assign val = point.traits.heure | remove: "h" %}
 
                             <div data="{{ val }}">
-                              {% checkin_point point.id, label: point.traits.heure %}
+                              {% capture label %}{{point.traits.heure}} {% if point.traits.type_public != blank %}- {{point.traits.type_public}}{% endif %}{% endcapture %}
+                              {% checkin_point point.id, label: label, display_remaining: true %}
                               <span data-starttime="{{ point.traits.heure | remove: 'h' }}" data-endtime="{{ point.traits.heure_fin | remove: 'h' }}"></span>
                             </div>
 
@@ -1043,7 +1064,6 @@ js src: none
               {% editable_text "Entête Récapitulatif Panier", type: cktext_area, priority: 64 %}{% endeditable_text %}
             </div>
 
-
             {% for category in categories %}
               {% assign category_index = category_index | plus:1 %}
               {% assign linked_guest_index = 0 %}
@@ -1067,9 +1087,38 @@ js src: none
                       <p>{{access_privilege.accesspoint_traits.jour | capitalize }} - {{access_privilege.accesspoint_traits.heure}} : {{access_privilege.accesspoint_traits.label}}</p>
                     {% endif %}
                   {% endfor %}
+
+                  {% if category == categories[0] %}
+                    <div class="control-group programm-checkbox">
+                      <label class="control-label">Moniteurs</label>
+                      <div class="controls">
+
+                        {% assign order_linked_guest_access_privileges = linked_guest.access_privileges | sort: "trait_heure" %}
+                        {% for session in order_linked_guest_access_privileges %}
+                          {% if session.accesspoint_traits.type == "session_roulage" and session.accesspoint_traits.jour == day %}
+                            <p>{{session.accespoint_traits.heure}}</p>
+                            {% for point in sorted_checkin_points %}
+                              {% if point.traits.jour == day and point.traits.type == "moniteur" and point.traits.heure == session.accesspoint_traits.heure %}
+                                <div data="">
+                                  {% capture label %}{{point.traits.heure}} - {{point.traits.label}}{% endcapture %}
+                                  {% checkin_point point.id, label: label, display_remaining: true %}
+                                </div>
+                              {% endif %}
+                            {% endfor %}
+
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endif %}
                 {% endfor %}
               {% endforeach_linked_guest %}
             {% endfor %}
+
+            {% foreach_linked_guest default_nb: 0 , guest_category_id: categories.first, add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
+
+
+            {% endforeach_linked_guest %}
 
             <div class="form-actions text-center">
               <a href="{{ guest.registration_form_url }}&etape=planning_sessions_roulage" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
@@ -1093,7 +1142,8 @@ js src: none
     <script src='https://applidget.github.io/vx-assets/shared/js/show-if/1.3.1/show-if.js'></script>
     <script src="https://applidget.github.io/vx-assets/shared/js/datetime-overlapse/1.2.1/datetime-overlapse.js"></script>
     <script type="text/javascript" src="https://applidget.github.io/assets/shared/ticketing_module/ticketing_module.js"></script>
-    <!--<script type="text/javascript" src="https://348bce17.ngrok.io/vx-assets/orgs/exclusive-drive/2018/billetterie-exclusive-drive/js/main.js"></script>-->
-    <script type="text/javascript" src="https://laurent-d.github.io/em_exclusive-drive_2018/js/main.js"></script>
+    <!-- <script type="text/javascript" src="https://ojansen.serveo.net/vx-assets/orgs/exclusive-drive/2018/billetterie-exclusive-drive/js/main.js"></script> -->
+    <!-- <script type="text/javascript" src="https://laurent-d.github.io/em_exclusive-drive_2018/js/main.js"></script> -->
+    <script type="text/javascript" src="https://60b14107.ngrok.io/js/main.js"></script>
   </body>
 </html>
