@@ -148,7 +148,7 @@ js src: none
       {% assign sorted_checkin_points = checkin_points | sort: "trait_rank" %}
 
       {% assign categories = "5b32597f07e935001e0041d1,5b3390f77ae1c3001e000089,5b338f61ed9cd5001f000289,5b852e4ab525cb001e00751e" | split: "," %}
-      {% assign category_names = "Pilote Principal,Accompagnant Pilote,Accompagnant,Accompagnant de moins de 16 ans" | split: "," %}
+      {% assign category_names = "Pilote Principal,Pilote Supplémentaire,Accompagnant,Accompagnant de moins de 16 ans" | split: "," %}
 
       <!-- <script type="text/javascript">
       var nb_pilotes = "{% if guest.guest_metadata.nb_pilotes != "" %} {{guest.guest_metadata.nb_pilotes}} Pilotes Supp{% endif%}";
@@ -229,9 +229,9 @@ js src: none
 
                 <p>Mes accompagnants (à partir de 88 euros) :</p>
                 <div class="inline">
-                  {% guest_select_from_field nb_pilotes "Nombre d’accompagnant(s) pilote supplémentaire de votre voiture", checked:"0" %}
+                  {% guest_select_from_field nb_pilotes "Nombre de pilote(s) supplémentaire(s) de votre voiture", checked:"0" %}
                   <p><small>Inclus: entrée, accueil café et open bar soft, déjeuners et diners, bracelet pilote supplémentaire sur votre auto pour les mêmes jours que vous.</small><br></p>
-                  {% guest_select_from_field nb_accompagnants "Nombre d'accompagnant(s) simple adulte de plus de 16 ans", checked:"0" %}
+                  {% guest_select_from_field nb_accompagnants "Nombre d'accompagnant(s) adulte de plus de 16 ans", checked:"0" %}
                   <p><small>Inclus: entrée, open bar soft, déjeuners et diners, pour les mêmes jours que vous.</small><br></p>
                   {% guest_select_from_field nb_accompagnants_mineurs "Nombre d’accompagnant(s) de moins de 16 ans (entrée gratuite accompagnés d’un adulte, pièce d’id demandée a l’entrée)", checked:"0" %}
                   <p><small>Inclus: Open bar soft, déjeuners et diners, pour les mêmes jours que vous.</small></p>
@@ -328,7 +328,7 @@ js src: none
                           <p><strong>Inclus :</strong></p>
                           <ul>
                             {% if category == categories[0] %}<li>Parking</li>{% endif %}
-                            {% if category == categories[1] %}<li>Forfait Pilote additionnel</li>{% endif %}
+                            {% if category == categories[1] %}<li>Forfait Pilote supplémentaire</li>{% endif %}
                             {% if category != categories[2] %}<li>Entrée sur l'événement</li>{% endif %}
                             <li>Accueil café et open bar soft toute la journée</li>
                           </ul>
@@ -355,7 +355,7 @@ js src: none
 
                           {% if category == categories[1] %}
                             <div class="control-group" style="display:none;">
-                              <label class="control-label">Pilote additionnel</label>
+                              <label class="control-label">Pilote supplémentaire</label>
                               <div class="controls">
                                 {% for point in sorted_checkin_points %}
                                   {% if point.traits.jour == day and point.traits.type == "pilote" %}
@@ -413,7 +413,7 @@ js src: none
                                   {% if days.last == day  %}
                                     {% if point.traits.jour == day and point.traits.type == "diner" %}
                                     <div class="excl">
-                                      {% checkin_point point.id, label: point.traits.label, checked:true%}
+                                      {% checkin_point point.id, label: point.traits.label, checked:false %}
                                       </div>
                                     {% endif %}
                                   {% else %}
@@ -476,47 +476,48 @@ js src: none
                     {% assign linked_guest_index = linked_guest_index | plus:1 %}
 
                     <div style="vertical-align: middle;">
-                      <h2 style="display: inline-block;width: auto;">{{linked_guest.guest_category.name}} #{{linked_guest_index}} {% if category_index == 0 %}: {{linked_guest.identity}} {% endif %}</h2>
+                      <h2>{{category_names[category_index]}} {% if category_index > 0 %}#{{linked_guest_index}}{% endif %}</h2>
                     </div>
                     <div class="row--fluid clearfix">
                       <div class=""><p><strong>Souhaitez-vous vous inscrire :</strong></p></div>
                       <div class="w100">
                         <div class="inner-box clearfix">
-                          <h3>Bapteme Bugatti</h3>
+                          <h2>Bapteme Bugatti</h2>
                           <p>Baptême sur le circuit Bugatti, 2 tours en passsager avec un pilote professionnel.<br>
                             Accès à EXCLUSIVE DRIVE : entrée et parking offerts! Se présenter impérativement 10 minutes avant le début de son baptême - 16 ans minimum.</p>
                           <!-- {% guest_checkbox_field bapteme_bugatti "Bapteme Bugatti" %}
                           <div data-show-if="bapteme_bugatti==1"> -->
 
                           <div class="media">
-                            <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/ProtoLeMans.jpg">
+                            <div class="pull-left span3">
+                              <!-- https://60b14107.ngrok.io/img/ -->
+                              <img class="media-object" src="https://60b14107.ngrok.io/img/ProtoLeMans.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field bapteme_bugatti_prototype_pescarolo "<h4>Baptême en Prototype Pescarolo Le Mans</h4> 360cv - Boite séquentielle - 850kg - Des sensations comme aux 24 Heures du Mans ! - <em>199,00 EUR TTC</em>" %}
+                                {% guest_checkbox_field bapteme_bugatti_prototype_pescarolo "<h4>Baptême en <b>Prototype Pescarolo Le Mans</b> <em>- 199,00 EUR TTC</em></h4> 360cv - Boite séquentielle - 850kg - Des sensations comme aux 24 Heures du Mans !" %}
                               </div>
                             </div>
                           </div>
 
                           <div class="media">
-                            <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/RadicalBapt%C3%AAme.jpg">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://60b14107.ngrok.io/img/RadicalBapt%C3%AAme.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field bapteme_bugatti_prototype_radical "<h4>Baptême en Prototype Radical SR3 SL</h4> 300cv - Boite séquentielle - 725kg - Plus rapide qu'une Porsche GT2 RS ! - <em>159,00 EUR TTC</em>" %}
+                                {% guest_checkbox_field bapteme_bugatti_prototype_radical "<h4>Baptême en <b>Prototype Radical SR3 SL</b><em>- 159,00 EUR TTC</em></h4> 300cv - Boite séquentielle - 725kg - Plus rapide qu'une Porsche GT2 RS !" %}
                               </div>
                             </div>
                           </div>
 
                           <div class="media">
-                            <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/LameraCup.jpg">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://60b14107.ngrok.io/img/LameraCup.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field bapteme_bugatti_prototype_lamera "<h4>Baptême en Lamera Cup</h4> 300 cv - Boite séquentielle - 910kg - Une vraie voiture de course ! - <em>129,00 EUR TTC</em>" %}
+                                {% guest_checkbox_field bapteme_bugatti_prototype_lamera "<h4>Baptême en <b>Lamera Cup</b> <em>- 129,00 EUR TTC</em></h4> 300 cv - Boite séquentielle - 910kg - Une vraie voiture de course !" %}
                               </div>
                             </div>
                           </div>
@@ -527,29 +528,29 @@ js src: none
 
                       <div class="w100">
                         <div class="inner-box clearfix">
-                          <h3>Stage de pilotage Bugatti</h3>
+                          <h2>Stage de pilotage Bugatti</h2>
                           <p>Stage de pilotage sur le circuit Bugatti <br>
                             Session de 30 mn : 15 mn de briefing + 15 mn de roulage avec un coach
                             Accès à EXCLUSIVE DRIVE : entrée et parking offerts ! Se présenter impérativement 15 minutes avant le début de son stage</p>
 
                             <div class="media">
-                              <div class="pull-left span2">
-                                <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/LamborghiniHuracan.jpg">
+                              <div class="pull-left span3">
+                                <img class="media-object" src="https://60b14107.ngrok.io/img/LamborghiniHuracan.jpg">
                               </div>
                               <div class="media-body">
                                 <div class="media">
-                                  {% guest_checkbox_field stage_bugatti_lamborghini "<h4>Stage de pilotage Lamborghini Huracan Performante</h4> V10 / 5,2L 640cv - Boîte double embrayage 7 rapports - 1382 kg - 0 à 100 km/h en 2,9 sec - Une occasion unique de piloter une voiture d'exception sur le Bugatti, inoubliable ! - <em>399,00 EUR TTC</em>" %}
+                                  {% guest_checkbox_field stage_bugatti_lamborghini "<h4>Stage de pilotage <b>Lamborghini Huracan Performante</b> <em>- 399,00 EUR TTC</em></h4> V10 / 5,2L 640cv - Boîte double embrayage 7 rapports - 1382 kg - 0 à 100 km/h en 2,9 sec - Une occasion unique de piloter une voiture d'exception sur le Bugatti, inoubliable ! <div class='fran'>Franchise: 4000 €</div>" %}
                                 </div>
                               </div>
                             </div>
 
                           <div class="media">
-                            <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/AlpineA110.jpg">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://60b14107.ngrok.io/img/AlpineA110.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field stage_bugatti_alpine "<h4>Stage de pilotage Alpine A110</h4>4 cyl / 1,8L Turbo 250cv - Boîte palettes au volant - 1100 kg - 0 à 100 km/h en 4,5 sec - La légende Alpine, d'une agilité absolue - <em>349,00 EUR TTC</em>" %}
+                                {% guest_checkbox_field stage_bugatti_alpine "<h4>Stage de pilotage <b>Alpine A110</b> <em>- 349,00 EUR TTC </em></h4>4 cyl / 1,8L Turbo 250cv - Boîte palettes au volant - 1100 kg - 0 à 100 km/h en 4,5 sec - La légende Alpine, d'une agilité absolue <div class='fran'>Franchise: 3000 €</div>" %}
                               </div>
                             </div>
                           </div>
@@ -559,75 +560,75 @@ js src: none
 
                       <div class="w100">
                         <div class="inner-box clearfix">
-                          <h3>Stage de pilotage Maison Blanche</h3>
+                          <h2>Stage de pilotage Maison Blanche</h2>
                           <p>Stage de pilotage sur le circuit de Maison Blanche en version 3km, au tracé très rapide et technique, reprenant le célèbre virage Corvette du circuit des 24 Heures.<br>
                             Session de 30 mn : 15 mn de briefing + 15 mn de roulage avec un coach. <br>
                             Accès à EXCLUSIVE DRIVE : entrée et parking offerts ! Se présenter impérativement 15 minutes avent le début de son stage - minimum 18 ans, permis de conduire + caution.</p>
                           <!-- {% guest_checkbox_field stage_maison_blanche "Stage Maison Blanche" %}
                           <div data-show-if="stage_maison_blanche==1"> -->
                           <div class="media">
-                            <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/Ferrari458Sp%C3%A9ciale.jpg">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://60b14107.ngrok.io/img/Ferrari458Sp%C3%A9ciale.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field stage_maison_blanche_ferrari "<h4>Stage de pilotage FERRARI 458 Spéciale</h4>V8 / 4,5L 605cv - Boîte double embrayage 7 rapports - 1395 kg - 0 à 100 km/h en 3 sec - Pneus semi-slick - Pilotez le mythe Ferrari au Mans! - <em>299,00 EUR TTC</em>"  %}
+                                {% guest_checkbox_field stage_maison_blanche_ferrari "<h4>Stage de pilotage <b>FERRARI 458 Spéciale</b> <em>- 299,00 EUR TTC</em></h4>V8 / 4,5L 605cv - Boîte double embrayage 7 rapports - 1395 kg - 0 à 100 km/h en 3 sec - Pneus semi-slick - Pilotez le mythe Ferrari au Mans! <div class='fran'>Franchise: 4000 €</div>" %}
                               </div>
                             </div>
                           </div>
 
                           <div class="media">
-                            <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/Porsche-991-GT3-RS.jpg">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://60b14107.ngrok.io/img/Porsche-991-GT3-RS.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field stage_maison_blanche_porsche "<h4>Stage de pilotage PORSCHE 991 GT3 RS</h4> Flat 6 / 4,0L 500cv - Boîte double embrayage 7 rapports - 1495 kg - 0 à 100 km/h en 3,3 sec - Pneus semi-slick -  Exceptionnel une pure voiture de piste comme Porsche sait si bien les faire. - <em>299,00 EUR TTC</em>"   %}
+                                {% guest_checkbox_field stage_maison_blanche_porsche "<h4>Stage de pilotage <b>PORSCHE 991 GT3 RS</b> <em>- 299,00 EUR TTC</em></h4> Flat 6 / 4,0L 500cv - Boîte double embrayage 7 rapports - 1495 kg - 0 à 100 km/h en 3,3 sec - Pneus semi-slick -  Exceptionnel une pure voiture de piste comme Porsche sait si bien les faire. <div class='fran'>Franchise: 4000 €</div>" %}
                               </div>
                             </div>
                           </div>
 
                           <div class="media">
-                            <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/AudiR8GT.jpg">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://60b14107.ngrok.io/img/AudiR8GT.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field stage_maison_blanche_audi "<h4>Stage de pilotage AUDI R8 GT</h4> V10 / 5,2L 580cv - Boîte séquentielle 6 rapports - 1525 kg - 0 à 100 km/h en 3,6 sec - Pilotez l'Audi la plus pistarde au Mans ! - <em>279,00 EUR TTC</em>"   %}
+                                {% guest_checkbox_field stage_maison_blanche_audi "<h4>Stage de pilotage <b>AUDI R8 GT</b> <em>- 279,00 EUR TTC</em></h4> V10 / 5,2L 580cv - Boîte séquentielle 6 rapports - 1525 kg - 0 à 100 km/h en 3,6 sec - Pilotez l'Audi la plus pistarde au Mans ! <div class='fran'>Franchise: 2000 €</div>"   %}
                               </div>
                             </div>
                           </div>
 
                           <div class="media">
-                            <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/LotusExigeV6.jpg">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://60b14107.ngrok.io/img/LotusExigeV6.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field stage_maison_blanche_lotus "<h4>Stage de pilotage LOTUS EXIGE V6</h4> V6 / 3,5L 350cv - Boîte manuelle 6 rapports - 1066 kg - 0 à 100 km/h en 3,7 sec - Pneus semi-slick - On dit que c'est une chasseuse de chronomètre au chassis très affuté ! - <em>249,00 EUR TTC</em>"   %}
+                                {% guest_checkbox_field stage_maison_blanche_lotus "<h4>Stage de pilotage <b>LOTUS EXIGE V6</b> <em>- 249,00 EUR TTC</em></h4> V6 / 3,5L 350cv - Boîte manuelle 6 rapports - 1066 kg - 0 à 100 km/h en 3,7 sec - Pneus semi-slick - On dit que c'est une chasseuse de chronomètre au chassis très affuté ! <div class='fran'>Franchise: 2000 €</div>"   %}
                               </div>
                             </div>
                           </div>
 
                           <div class="media">
-                            <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/KTM-X-Bow-RR.jpg">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://60b14107.ngrok.io/img/KTM-X-Bow-RR.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field stage_maison_blanche_ktm "<h4>Stage de pilotage KTM XBOW R</h4> 4 Cyl / 2,0L 300cv - Boîte manuelle 6 rapports - 800 kg - 0 à 100 km/h en 3,9 sec - Pneus semi-slick - Une machine à sensations fortes et directs ! - <em>239,00 EUR TTC</em>"   %}
+                                {% guest_checkbox_field stage_maison_blanche_ktm "<h4>Stage de pilotage <b>KTM XBOW R</b> <em>- 239,00 EUR TTC</em></h4> 4 Cyl / 2,0L 300cv - Boîte manuelle 6 rapports - 800 kg - 0 à 100 km/h en 3,9 sec - Pneus semi-slick - Une machine à sensations fortes et directs ! <div class='fran'>Franchise: 4000 €</div>"   %}
                               </div>
                             </div>
                           </div>
 
                           <!-- ADD Megane 4 RS -->
                           <div class="media">
-                            <div class="pull-left span2">
+                            <div class="pull-left span3">
                               <img class="media-object" src="https://60b14107.ngrok.io/img/Megane4RS.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field stage_maison_blanche_renault "<h4>Stage de pilotage RENAULT MEGANE 4 RS</h4>4 Cyl / 2,0L 280cv - Boîte double embrayage 6 rapports - 1430 kg - 0 à 100 km/h en 5,9 sec - La plus méchante de toutes les Meganes jamais produite - <em>199,00 EUR TTC</em>"  %}
+                                {% guest_checkbox_field stage_maison_blanche_renault "<h4>Stage de pilotage <b>RENAULT MEGANE 4 RS</b> <em>- 199,00 EUR TTC</em></h4>4 Cyl / 2,0L 280cv - Boîte double embrayage 6 rapports - 1430 kg - 0 à 100 km/h en 5,9 sec - La plus méchante de toutes les Meganes jamais produite <div class='fran'>Franchise: 2000 €</div>"  %}
                               </div>
                             </div>
                           </div>
@@ -641,15 +642,15 @@ js src: none
 
                       <div class="w100">
                         <div class="inner-box clearfix">
-                          <h3>Course de kart</h3>
+                          <h2>Course de kart</h2>
                           <p>Réservez votre course de Kart, en une heure: Accueil + équipement + briefing + 5 minutes d’essais libres + 5 minutes d’essais chronométrés + 25 minutes de course sprint - PODIUM pour les 3 premiers des jolis lots à gagner… Grosse attaque et du fun pour tout le monde !</p>
                           <div class="media">
-                            <div class="pull-left span2">
-                              <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/kart.jpg">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://60b14107.ngrok.io/img/kart.jpg">
                             </div>
                             <div class="media-body">
                               <div class="media">
-                                {% guest_checkbox_field course_kart "<h4 style='display:inline-block'>Course de kart</h4> - <em>150,00 EUR TTC</em>" %}
+                                {% guest_checkbox_field course_kart "<h4 style='display:inline-block'><b>Course de kart</b> <em>- 150,00 EUR TTC</em></h4>" %}
                               </div>
                             </div>
                           </div>
@@ -659,15 +660,15 @@ js src: none
                       {% if category == categories[0] %}
                         <div class="w100">
                           <div class="inner-box clearfix">
-                            <h3>Concours d'élégance</h3>
+                            <h2>Concours d'élégance</h2>
                             <p>Dimanche 24/3 uniquement, 30 participants maximum, accès au parc fermé sur la piste à 12H, remise des prix à 13H20 et parade des autos à 13H40. Des récompenses d'exception pour les vainqueurs des 5 catégories La plus Puissante, Belle monte de pneus, Brillante, Rétro et la plus Exclusive… Séjours au Byblos de Saint Tropez, Champagne,…<br> Accès à EXCLUSIVE DRIVE : entrée et parking du concours inclus !</p>
                             <div class="media">
-                              <div class="pull-left span2">
-                                <img class="media-object" src="https://s3-eu-west-1.amazonaws.com/assets.applidget.com/Exclusive+drive/concours+elegance.jpg">
+                              <div class="pull-left span3">
+                                <img class="media-object" src="https://60b14107.ngrok.io/img/concours+elegance.jpg">
                               </div>
                               <div class="media-body">
                                 <div class="media">
-                                  {% guest_checkbox_field concours_elegance "<h4>Concours d'élégance « Qui à la plus… ? »</h4> Exposition et défilé sur la ligne droite de départ des 24H - <em>125,00 EUR TTC</em>" %}
+                                  {% guest_checkbox_field elegance "<h4><b>Concours d'élégance « Qui à la plus… ? »</b> <em>- 125,00 EUR TTC</em></h4> Exposition et défilé sur la ligne droite de départ des 24H" %}
                                 </div>
                               </div>
                             </div>
@@ -740,7 +741,7 @@ js src: none
                 {% if linked_guest.guest_metadata.stage_maison_blanche_audi == "1" %} {% assign activite = activite | append:"stage_maison_blanche_audi "%} {% endif%}
                 {% if linked_guest.guest_metadata.stage_maison_blanche_renault == "1" %} {% assign activite = activite | append:"stage_maison_blanche_renault "%} {% endif%}
                 {% if linked_guest.guest_metadata.course_kart == "1" %} {% assign activite = activite | append:"course_kart "%} {% endif%}
-                {% if linked_guest.guest_metadata.concours_elegance == "1" %} {% assign activite = activite | append:"concours_elegance "%} {% endif%}
+                {% if linked_guest.guest_metadata.elegance == "1" %} {% assign activite = activite | append:"elegance "%} {% endif%}
 
                 {% if activite != "" %}
 
@@ -829,7 +830,7 @@ js src: none
                 {% if linked_guest.guest_metadata.stage_maison_blanche_audi == "1" %} {% assign activite = activite | append:"stage_maison_blanche_audi "%} {% endif%}
                 {% if linked_guest.guest_metadata.stage_maison_blanche_renault == "1" %} {% assign activite = activite | append:"stage_maison_blanche_renault "%} {% endif%}
                 {% if linked_guest.guest_metadata.course_kart == "1" %} {% assign activite = activite | append:"course_kart "%} {% endif%}
-                {% if linked_guest.guest_metadata.concours_elegance == "1" %} {% assign activite = activite | append:"concours_elegance "%} {% endif%}
+                {% if linked_guest.guest_metadata.elegance == "1" %} {% assign activite = activite | append:"elegance "%} {% endif%}
 
                 {% if activite != "" %}
 
@@ -910,7 +911,7 @@ js src: none
                 {% if linked_guest.guest_metadata.stage_maison_blanche_audi == "1" %} {% assign activite = activite | append:"stage_maison_blanche_audi "%} {% endif%}
                 {% if linked_guest.guest_metadata.stage_maison_blanche_renault == "1" %} {% assign activite = activite | append:"stage_maison_blanche_renault "%} {% endif%}
                 {% if linked_guest.guest_metadata.course_kart == "1" %} {% assign activite = activite | append:"course_kart "%} {% endif%}
-                {% if linked_guest.guest_metadata.concours_elegance == "1" %} {% assign activite = activite | append:"concours_elegance "%} {% endif%}
+                {% if linked_guest.guest_metadata.elegance == "1" %} {% assign activite = activite | append:"elegance "%} {% endif%}
 
                 {% if activite != "" %}
 
@@ -1080,7 +1081,7 @@ js src: none
             {% guest_field etape "Étape", type: hidden, value: "recapitulatif" %}
 
             <div class="tc maauto w75 mw80">
-              {% editable_text "Entête Récapitulatif Panier", type: cktext_area, priority: 64 %}{% endeditable_text %}
+              {% editable_text "Entête Récapitulatif Panier", type: cktext_area, priority: 64 %}Entête Récapitulatif Panier{% endeditable_text %}
             </div>
 
             {% for category in categories %}
@@ -1091,7 +1092,7 @@ js src: none
                 <h2>{{linked_guest.guest_category.name}} #{{linked_guest_index}} {% if category_index == 1 %}: {{linked_guest.identity}} {% endif %}</h2>
                 {% comment %}{% assign sorted_access_privileges = linked_guest.access_privileges | sort:accesspoint_name %}{% endcomment %}
 
-                <p>Inscription :</p>
+                <!-- <p>Inscription :</p> -->
                 {% for day in days %}
                   <hr />
                   <h3>{{day | capitalize }}</h3>
@@ -1121,25 +1122,29 @@ js src: none
                     {% endif %}
                   {% endfor %}
                   {% if count_nb_activites == 0 %}
-                  <p>Aucune activité prévue pour ce participant</p>
+                  <p>Aucune activité prévue</p>
                   {% endif %}
                   {% endunless %}
 
                   {% if category == categories[0] %}
                     <div class="control-group programm-checkbox">
-                      <label class="control-label">Moniteurs</label>
+                      <!-- <label class="control-label">Moniteurs</label> -->
                       <div class="controls">
-
                         {% assign order_linked_guest_access_privileges = linked_guest.access_privileges | sort: "trait_heure" %}
                         {% for session in order_linked_guest_access_privileges %}
                           {% if session.accesspoint_traits.type == "session_roulage" and session.accesspoint_traits.jour == day %}
                             <p>{{session.accespoint_traits.heure}}</p>
                             {% for point in sorted_checkin_points %}
+
                               {% if point.traits.jour == day and point.traits.type == "moniteur" and point.traits.heure == session.accesspoint_traits.heure %}
-                                <div data="">
+
+                              {% assign val = point.traits.heure | remove: "h" %}
+                                <div data="{{val}}">
                                   {% capture label %}{{point.traits.heure}} - {{point.traits.label}}{% endcapture %}
                                   {% checkin_point point.id, label: label, display_remaining: true %}
+                                  <span data-starttime="{{ point.traits.heure | remove: 'h' }}" data-endtime="{{ point.traits.heure_fin | remove: 'h' }}"></span>
                                 </div>
+
                               {% endif %}
                             {% endfor %}
 
@@ -1180,7 +1185,7 @@ js src: none
     <script src="https://applidget.github.io/vx-assets/shared/js/datetime-overlapse/1.2.1/datetime-overlapse.js"></script>
     <script type="text/javascript" src="https://applidget.github.io/assets/shared/ticketing_module/ticketing_module.js"></script>
     <!-- <script type="text/javascript" src="https://ojansen.serveo.net/vx-assets/orgs/exclusive-drive/2018/billetterie-exclusive-drive/js/main.js"></script> -->
-    <!-- <script type="text/javascript" src="https://laurent-d.github.io/em_exclusive-drive_2018/js/main.js"></script> -->
+    <!-- <script type="text/javascript" src="https://60b14107.ngrok.io/js/main.js"></script> -->
     <script type="text/javascript" src="https://60b14107.ngrok.io/js/main.js"></script>
 
   </body>

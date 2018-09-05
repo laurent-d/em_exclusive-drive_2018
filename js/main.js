@@ -7,6 +7,7 @@ $(function() {
 
   $('[id*=linked-person]').each(function() {
     copyFromField($(this).find('[data-copy-from]'));
+    console.log("copyFromField");
   });
 });
 
@@ -39,6 +40,7 @@ $( document ).ready(function() {
 
 // Required CheckBox Group Behaviour//
 $(function(){
+  console.log("required");
     var requiredCheckboxes = $('.required_group_fields :checkbox');
     if(!requiredCheckboxes.is( ':checked' )){requiredCheckboxes.attr('required', 'required');}
     requiredCheckboxes.change(function(){
@@ -53,4 +55,9 @@ $(function(){
 
 $(document).on('click', '[data] .checkbox input[type="checkbox"]', function(){
   $(this).parent().toggleClass('checked');
+  if ($(this).attr('checked')) {
+        $(this).removeAttr('checked');
+    } else {
+        $(this).attr('checked', 'checked');
+    }
 });
