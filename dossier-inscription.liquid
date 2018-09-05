@@ -283,24 +283,39 @@ js src: none
                     {% assign linked_guest_index = linked_guest_index | plus:1 %}
 
                     <h2>{{category_names[category_index]}} {% if category_index > 0 %}#{{linked_guest_index}}{% endif %}</h2>
-                    {% if category_index <= 1 %}
+
+                    {% if category_index == 0 %}
                     <div class="info-pilote clearfix">
                       <h3>Informations</h3>
-                      {% if category_index == 1 %}
+
+                      {% guest_field last_name "Nom", required: true, data-copy-from:"last_name" %}
+                      {% guest_field first_name "Prénom", required: true, data-copy-from:"first_name" %}
+                      <!-- <div style="clear:both"></div> -->
+                      {% guest_field email "Email", required: true, type: "hidden", data-copy-from:"email"  %}
+                      {% guest_field phone_number "Téléphone", required: true, type: "hidden", data-copy-from:"phone_number" %}
+
+                    </div>
+                    {% elsif category_index == 1 %}
+                    <div class="info-pilote clearfix">
+                      <h3>Informations</h3>
+
                       {% guest_field last_name "Nom", required: true, data-copy-from:"last_name" %}
                       {% guest_field first_name "Prénom", required: true, data-copy-from:"first_name" %}
                       <div style="clear:both"></div>
                       {% guest_field email "Email", required: true, data-copy-from:"email"  %}
                       {% guest_field phone_number "Téléphone", required: true, data-copy-from:"email" %}
-                      {% else %}
-                      {% guest_field email "Email", type: "hidden", value: guest.email  %}
-                      {% guest_field last_name "Nom", type: "hidden", value: guest.last_name  %}
-                      {% guest_field first_name "Prénom", type: "hidden", value: guest.first_name  %}
-                      <p>Nom : {{ guest.last_name }}</p>
-                      <p>Prénom : {{ guest.first_name }}</p>
-                      {% endif %}
+
+                    </div>
+                    {% else %}
+
+                    <div class="info-pilote clearfix">
+                    <h3>Informations</h3>
+                    {% guest_field last_name "Nom", required: true, data-copy-from:"last_name" %}
+                    {% guest_field first_name "Prénom", required: true, data-copy-from:"first_name" %}
+
                     </div>
                     {% endif %}
+
 
                     {% assign day_index = 0 %}
 
@@ -725,7 +740,7 @@ js src: none
                 {% if linked_guest.guest_metadata.stage_maison_blanche_audi == "1" %} {% assign activite = activite | append:"stage_maison_blanche_audi "%} {% endif%}
                 {% if linked_guest.guest_metadata.stage_maison_blanche_renault == "1" %} {% assign activite = activite | append:"stage_maison_blanche_renault "%} {% endif%}
                 {% if linked_guest.guest_metadata.course_kart == "1" %} {% assign activite = activite | append:"course_kart "%} {% endif%}
-                {% if linked_guest.guest_metadata.concours_elegance == "1" %} {% assign activite = activite | append:"stage_maison_blanche_porsche "%} {% endif%}
+                {% if linked_guest.guest_metadata.concours_elegance == "1" %} {% assign activite = activite | append:"concours_elegance "%} {% endif%}
 
                 {% if activite != "" %}
 
@@ -798,7 +813,8 @@ js src: none
 
             <fieldset>
               {% foreach_linked_guest default_nb: 0 , guest_category_id: categories[1], add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
-                <h2>{{linked_guest.guest_category.name}} #{{linked_guest_index}}  {% if category_index == 0 %}: {{linked_guest.identity}}{% endif %}</h2>
+              {% assign linked_guest_index = linked_guest_index | plus:1 %}
+                <h2>{{linked_guest.guest_category.name}} #{{linked_guest_index}} </h2>
                 {% assign activite = "" %}
 
                 {% if linked_guest.guest_metadata.bapteme_bugatti_prototype_pescarolo == "1" %} {% assign activite = activite | append:"bapteme_bugatti_prototype_pescarolo "%} {% endif%}
@@ -811,8 +827,9 @@ js src: none
                 {% if linked_guest.guest_metadata.stage_maison_blanche_ktm == "1" %} {% assign activite = activite | append:"stage_maison_blanche_ktm "%} {% endif%}
                 {% if linked_guest.guest_metadata.stage_maison_blanche_lotus == "1" %} {% assign activite = activite | append:"stage_maison_blanche_lotus "%} {% endif%}
                 {% if linked_guest.guest_metadata.stage_maison_blanche_audi == "1" %} {% assign activite = activite | append:"stage_maison_blanche_audi "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_renault == "1" %} {% assign activite = activite | append:"stage_maison_blanche_renault "%} {% endif%}
                 {% if linked_guest.guest_metadata.course_kart == "1" %} {% assign activite = activite | append:"course_kart "%} {% endif%}
-                {% if linked_guest.guest_metadata.concours_elegance == "1" %} {% assign activite = activite | append:"stage_maison_blanche_porsche "%} {% endif%}
+                {% if linked_guest.guest_metadata.concours_elegance == "1" %} {% assign activite = activite | append:"concours_elegance "%} {% endif%}
 
                 {% if activite != "" %}
 
@@ -877,7 +894,8 @@ js src: none
             <fieldset>
 
               {% foreach_linked_guest default_nb: 0 , guest_category_id: categories[2], add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
-                <h2>{{linked_guest.identity}}</h2>
+              {% assign linked_guest_index = linked_guest_index | plus:1 %}
+                <h2>{{linked_guest.guest_category.name}} #{{linked_guest_index}} </h2>
                 {% assign activite = "" %}
 
                 {% if linked_guest.guest_metadata.bapteme_bugatti_prototype_pescarolo == "1" %} {% assign activite = activite | append:"bapteme_bugatti_prototype_pescarolo "%} {% endif%}
@@ -890,8 +908,9 @@ js src: none
                 {% if linked_guest.guest_metadata.stage_maison_blanche_ktm == "1" %} {% assign activite = activite | append:"stage_maison_blanche_ktm "%} {% endif%}
                 {% if linked_guest.guest_metadata.stage_maison_blanche_lotus == "1" %} {% assign activite = activite | append:"stage_maison_blanche_lotus "%} {% endif%}
                 {% if linked_guest.guest_metadata.stage_maison_blanche_audi == "1" %} {% assign activite = activite | append:"stage_maison_blanche_audi "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_renault == "1" %} {% assign activite = activite | append:"stage_maison_blanche_renault "%} {% endif%}
                 {% if linked_guest.guest_metadata.course_kart == "1" %} {% assign activite = activite | append:"course_kart "%} {% endif%}
-                {% if linked_guest.guest_metadata.concours_elegance == "1" %} {% assign activite = activite | append:"stage_maison_blanche_porsche "%} {% endif%}
+                {% if linked_guest.guest_metadata.concours_elegance == "1" %} {% assign activite = activite | append:"concours_elegance "%} {% endif%}
 
                 {% if activite != "" %}
 
@@ -1074,19 +1093,37 @@ js src: none
 
                 <p>Inscription :</p>
                 {% for day in days %}
+                  <hr />
                   <h3>{{day | capitalize }}</h3>
                   <h4>Billets d'entrée</h4>
+
+                  {% for access_privilege in linked_guest.access_privileges %}
+                      {% if access_privilege.accesspoint_traits.jour == day and access_privilege.accesspoint_traits.category == "entree" %}
+                      <p>{{access_privilege.accesspoint_traits.label}}</p>
+                      {% endif %}
+                  {% endfor %}
+
+                  {% comment %}
                   {% for access_privilege in linked_guest.access_privileges %}
                     {% if access_privilege.accesspoint_traits.jour == day and access_privilege.accesspoint_traits.category == "entree" %}
                     {% endif %}
                   {% endfor %}
+                  {% endcomment %}
 
+                  {% unless category == categories[3] %}
                   <h4>Activités</h4>
+                  {% assign count_nb_activites = 0 %}
+
                   {% for access_privilege in linked_guest.access_privileges %}
                     {% if access_privilege.accesspoint_traits.jour == day and access_privilege.accesspoint_traits.category == "activite" %}
                       <p>{{access_privilege.accesspoint_traits.jour | capitalize }} - {{access_privilege.accesspoint_traits.heure}} : {{access_privilege.accesspoint_traits.label}}</p>
+                      {% assign count_nb_activites = count_nb_activites | plus: 1 %}
                     {% endif %}
                   {% endfor %}
+                  {% if count_nb_activites == 0 %}
+                  <p>Aucune activité prévue pour ce participant</p>
+                  {% endif %}
+                  {% endunless %}
 
                   {% if category == categories[0] %}
                     <div class="control-group programm-checkbox">
@@ -1115,10 +1152,10 @@ js src: none
               {% endforeach_linked_guest %}
             {% endfor %}
 
+            {% comment %}
             {% foreach_linked_guest default_nb: 0 , guest_category_id: categories.first, add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
-
-
             {% endforeach_linked_guest %}
+            {% endcomment %}
 
             <div class="form-actions text-center">
               <a href="{{ guest.registration_form_url }}&etape=planning_sessions_roulage" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
@@ -1145,5 +1182,6 @@ js src: none
     <!-- <script type="text/javascript" src="https://ojansen.serveo.net/vx-assets/orgs/exclusive-drive/2018/billetterie-exclusive-drive/js/main.js"></script> -->
     <!-- <script type="text/javascript" src="https://laurent-d.github.io/em_exclusive-drive_2018/js/main.js"></script> -->
     <script type="text/javascript" src="https://60b14107.ngrok.io/js/main.js"></script>
+
   </body>
 </html>

@@ -783,3 +783,11 @@ font-style: initial;
 .media:hover .media-object {
     transform: scale(1.2);
 }
+
+hr {
+    margin: 20px 0 5px;
+    border: 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #fff;
+    display: inline-block;
+}
