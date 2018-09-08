@@ -1,0 +1,1193 @@
+<!--
+liquid src: https://applidget.github.io/vx-assets/orgs/exclusive-drive/2018/billetterie-exclusive-drive/liquid/dossier-inscription.liquid
+css src: https://applidget.github.io/vx-assets/orgs/exclusive-drive/2018/billetterie-exclusive-drive/css/style.css
+js src: none
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Inscriptions {{event.title}}}</title>
+
+    <script type="text/javascript" src="{{ 'registration/registration.js' | asset_path }}"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://applidget.github.io/assets/shared/ticketing_module/ticketing_module.css">
+    <link rel="stylesheet" type="text/css" href="{{ 'registration/registration.css' | asset_path }}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    {% capture currentCategory %}{{ guest_category.traits.name }}{% endcapture %}
+    {% capture banner %}{% editable_file "Bannière personnalisée", priority: 99 %}https://placehold.it/1200x300{% endeditable_file %}{% endcapture %}
+
+    {% capture display_event_photo %}{% editable_select "Sélectionner la bannière à utiliser", default: "c", priority: 100 %}
+    {% editable_select_option "c", label: "Couverture de l'évènement" %}{% editable_select_option "b", label: "Bannière personnalisée" %}{% editable_select_option "n", label: "Pas de bannière" %}
+    {% endeditable_select %}{% endcapture %}
+
+    {% capture main_color %}{% editable_text "Couleur principale", hint: 'Entrez ici le code de la couleur principale', priority: 99 %}{% endeditable_text %}{% endcapture %}
+    {% if main_color == "" %}{% assign main_color = event.primary_color %}{% endif %}
+
+    {% capture form_width %}{% editable_select "Format formulaire", default: "fullscreen", priority: 98, hint: "Le mode fullscreen est à préférer pour l'intégration du formulaire en iframe." %}
+      {% editable_select_option "fixwidth", label: "Largeur fixe" %}
+      {% editable_select_option "fullscreen", label: "Fullscreen" %}
+    {% endeditable_select %}{% endcapture %}
+
+    {% capture previous_step %}{% editable_text "Bouton étape précédente",  priority: 12 %}Étape précédente{% endeditable_text %}{% endcapture %}
+    {% capture next_step %}{% editable_text "Bouton étape suivante",  priority: 10 %}Étape suivante{% endeditable_text %}{% endcapture %}
+    {% capture remove_ticket_button %}{% editable_text "Bouton suppression ticket", priority: 56 %}Retirer ce participant{% endeditable_text %}{% endcapture %}
+    {% capture id_linked_guest_pilote %}{% editable_text "Etape 1 - ID catégorie Pilote" %}{% endeditable_text %}{% endcapture %}
+
+    <style>
+      body { background-color: #FFFFFF; padding: 20px;  }
+      .with-max-width .registration-form .form-actions{background-color: #FFFFFF;}
+      .with-max-width {border:none; margin-top:18px;font-size:14px;}
+      {% if form_width == "fullscreen" %}
+        .with-max-width { max-width: 100%; }
+      {% endif %}
+
+      /* Font sizes */
+      /* Uncomment the line below if you feel like the input labels and button text is too big */
+      /* body, p, label, input, button, select, textarea { font-size: 13px !important; } */
+      h1 { font-size: 24px;  color: #32aca5;}
+      legend { font-size: 16px; color: #FCB100;}
+      a:focus { outline: none; }
+
+      /* Some vertical spacing overrides for Bootstrap */
+      .form-horizontal legend { margin-bottom: 0; }
+      .form-horizontal .form-actions { margin-top: 0;  padding-left: 0;}
+      .form-actions{border-top: none}
+      .top-md { margin-top: 20px; }
+      .inline-input { width: 100%; }
+
+      /* Help */
+      .help-inline, .help-block { color: #888; }
+
+      /* Required field */
+      label[required=required]:after { color: #e32; content: ' *'; font-weight: bold; }
+
+      /* Check-in points */
+      .capacity-reached .name { text-decoration: line-through; }
+      .capacity-reached .full:after { content: ' - COMPLET'; }
+      .capacity-reached .full.error:after { color: red; font-weight: bold; }
+      .remaining:before, .check-in-point-price:before { content: ' - '; }
+      .remaining, .check-in-point-price { font-style: italic; }
+      .valid-promo-code + .help-inline:before { content: 'Réduction :'; }
+      .valid-invitation-code + .help-inline:before { content: 'Places restantes : '; }
+      .invalid-promo-code-used-too-much + .help-inline:before {
+        content: 'Désolé, ce code promo a été atteint sa limite d\'utilisation.';
+      }
+
+      .banner-form { margin: 10px auto; display: block; max-width: 100%; padding-bottom:5px; }
+
+      /* Navigation Tabs */
+      #myTab li.active a { color: #595858; }
+      .nav-tabs>li>a { padding-right: 10px; padding-left: 10px; font-size:15px; }
+      #myTab li:not(.disabled) a { color:{{main_color}}; }
+      .nav-tabs>.disabled>a:hover, .nav-tabs>.disabled>a:focus { border-color: #fff #fff #ddd #fff; }
+
+      /* Buttons */
+      .btn { border-radius: 3px; }
+      .btn-primary,
+      .btn-primary:hover,
+      .btn-primary:focus,
+      .btn-primary:active{outline-color: {{main_color}}; background-image: none; background-color: {{main_color}}; border: none;}
+
+      .grey-label { text-align: center; clear: both; color: #A3A3A3; }
+
+      .img-responsive {
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+
+      @media (min-width: 767px) {
+        .badges-form .w33 { margin-left: 5px; width: 18%; }
+        .badges-form .w33.action { width: 20px; }
+      }
+      @media (max-width:979px){
+        .nav-tabs>li>a { font-size:12px; }
+      }
+      @media (max-width:767px){
+        .nav-tabs>li>a { font-size:13px; }
+      }
+    </style>
+    <!-- <link rel="stylesheet" type="text/css" href="https://applidget.github.io/vx-assets/orgs/exclusive-drive/2018/billetterie-exclusive-drive/css/style.css" /> -->
+    <link rel="stylesheet" type="text/css" href="https://laurent-d.github.io/em_exclusive-drive_2018//css/style.css" />
+  </head>
+  <body>
+    <div class="header-banner">
+      {% if display_event_photo == "c" %}
+        {% if event.cover_original != blank %}
+          <img class="banner-form" src="{{event.cover_original}}" />
+        {% endif %}
+      {% elsif display_event_photo == "b" %}
+        {% if banner != blank %}
+          <img class="banner-form" src="{{banner}}" />
+        {% endif %}
+      {% endif %}
+    </div>
+    <div class="with-max-width">
+      {{ registration_error_message }}
+      {% if guest_errors != nil %}
+        <div class="alert alert-danger">
+          <ul>
+            {% for error in guest_errors %}
+              <li>{{ error[1] }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      {{ registration_form_start }}
+      {% editable_text "Entête du formulaire", type: cktext_area, priority: 95 %}<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>{% endeditable_text %}
+
+      {% assign higherStep = guest.guest_metadata.higher_step %}
+      {% assign locked = guest.guest_metadata.locked %}
+      {% assign sorted_checkin_points = checkin_points | sort: "trait_rank" %}
+
+      {% assign categories = "5b32597f07e935001e0041d1,5b3390f77ae1c3001e000089,5b338f61ed9cd5001f000289,5b852e4ab525cb001e00751e" | split: "," %}
+      {% assign category_names = "Pilote Principal,Pilote Supplémentaire,Accompagnant,Accompagnant de moins de 16 ans" | split: "," %}
+
+      <!-- <script type="text/javascript">
+      var nb_pilotes = "{% if guest.guest_metadata.nb_pilotes != "" %} {{guest.guest_metadata.nb_pilotes}} Pilotes Supp{% endif%}";
+      var nb_accompagnants = "{% if guest.guest_metadata.nb_accompagnants != "" %} {{guest.guest_metadata.nb_accompagnants}} Accompagnants Non Mineurs{% endif%}";
+      var nb_accompagnants_mineurs = "{% if guest.guest_metadata.nb_accompagnants_mineurs != "" %} {{guest.guest_metadata.nb_accompagnants_mineurs}} Accompagnants Mineurs{% endif%}";
+      console.log(nb_pilotes + "\n" + nb_accompagnants + "\n" +nb_accompagnants_mineurs);
+      console.log("{{ guest.guest_metadata.nb_accompagnants_mineurs }}");
+      </script> -->
+
+      {% comment %}
+        {% if guest.guest_metadata.nb_pilotes != "" %} {{guest.guest_metadata.nb_pilotes}} Pilote(s) {% endif%}
+        {% if guest.guest_metadata.nb_accompagnants != "" %} {{guest.guest_metadata.nb_accompagnants}} Accompagnant(s){% endif%}
+        {% if guest.guest_metadata.nb_accompagnants_mineurs != "" %} {{guest.guest_metadata.nb_accompagnants_mineurs}} Accompagnant(s) Mineurs{% endif%}
+      {% endcomment %}
+
+
+
+      <ul id="myTab" class="nav nav-tabs top-md">
+        <!-- Inscription -->
+        <li class="{% if url_params.etape == 'inscription' or url_params.etape == nil %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 1", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li>
+        <li class="{% if url_params.etape == 'participants' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 2", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li>
+        <li class="{% if url_params.etape == 'activites' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 3", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li>
+        <li class="{% if url_params.etape == 'planning_pilote_principal' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 4", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li>
+        {% unless url_params.etape == 'inscription' or url_params.etape == nil %}
+          {% if guest.guest_metadata.nb_pilotes != ""  %} <li class="{% if url_params.etape == 'planning_pilotes_additionnels' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 5", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li> {% endif%}
+          {% if guest.guest_metadata.nb_accompagnants != "" %} <li class="{% if url_params.etape == 'planning_accompagnants' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 6", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li> {% endif%}
+        {% endunless %}
+        <li class="{% if url_params.etape == 'planning_sessions_roulage' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 7", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li>
+        <li class="{% if url_params.etape == 'moniteur' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 8", priority: 84 %}Moniteurs{% endeditable_text %}</a></li>
+        <li class="{% if url_params.etape == 'recapitulatif' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 9", priority: 84 %}Récapitulatif{% endeditable_text %}</a></li>
+      </ul>
+
+      <div class="tab-content">
+
+        {% if url_params.etape == nil or url_params.etape == "inscription" %}
+          {% if higherStep == nil or higherStep == "" or higherStep == "inscription" %}
+            {% guest_field higher_step "Étape la plus haute", type: hidden, value: "inscription" %}
+          {% endif %}
+
+          <div id="inscription">
+
+            {% redirect_with "etape", "participants" %}
+            <fieldset>
+              {% guest_field etape "Étape", type: hidden, value: "inscription" %}
+
+              <div class="w50 pa1">
+                {% editable_text "Entête étape 1", type: cktext_area, priority: 70 %}<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>{% endeditable_text %}
+              </div>
+              <div class="w50 bg-white pa1" id="inscription-form">
+                <h2>Informations personnelles</h2>
+                <div class="main-guest-field">
+
+                  <div class="w50">
+                    {% guest_field first_name "Prénom", required: true %}
+                  </div>
+                  <div class="w50">
+                    {% guest_field last_name "Nom", required: true %}
+                  </div>
+
+                  {% guest_field email "Email", required: true %}
+                  <span class="info">
+                    {% editable_text "High light Email", type: cktext_area, priority: 70 %}<p>On a besoin de votre email</p>{% endeditable_text %}
+                  </span>
+                  {% guest_field phone_number "Téléphone", required: true %}
+
+                </div>
+
+                <hr />
+                <h2>Votre venue</h2>
+                <p>Je souhaite venir :</p>
+                <div class="required_group_fields">
+                  {% guest_checkbox_field vendredi "Vendredi", group: true %}
+                  {% guest_checkbox_field samedi "Samedi", group: true %}
+                  {% guest_checkbox_field dimanche "Dimanche", group: true %}
+                </div>
+
+                <hr />
+
+                <p>Mes accompagnants (à partir de 88 euros) :</p>
+                <div class="inline">
+                  {% guest_select_from_field nb_pilotes "Nombre de pilote(s) supplémentaire(s) de votre voiture", checked:"0" %}
+                  <p><small>Inclus: entrée, accueil café et open bar soft, déjeuners et diners, bracelet pilote supplémentaire sur votre auto pour les mêmes jours que vous.</small><br></p>
+                  {% guest_select_from_field nb_accompagnants "Nombre d'accompagnant(s) adulte de plus de 16 ans", checked:"0" %}
+                  <p><small>Inclus: entrée, open bar soft, déjeuners et diners, pour les mêmes jours que vous.</small><br></p>
+                  {% guest_select_from_field nb_accompagnants_mineurs "Nombre d’accompagnant(s) de moins de 16 ans (entrée gratuite accompagnés d’un adulte, pièce d’id demandée a l’entrée)", checked:"0" %}
+                  <p><small>Inclus: Open bar soft, déjeuners et diners, pour les mêmes jours que vous.</small></p>
+                </div>
+
+                <div class="form-actions text-center">
+                  <input type="submit" class="btn btn-primary btn-large" value="S'inscrire" />
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+        {% elsif url_params.etape == "participants" %}
+
+          <div id="participants">
+
+            {% redirect_with "etape", "activites" %}
+            {% if higherStep == 'inscription' %}
+              {% guest_field higher_step "Étape la plus haute", type: hidden, value: "participants" %}
+            {% endif %}
+            {% guest_field etape "Étape", type: hidden, value: "participants" %}
+
+            <h1 class="tc">Participants</h1>
+            <div class="tc maauto w75 mw80">
+              <p class="tc">Cette étape vous permet d'ajouter vos préférences de déjeuners et dîners pour vous et vos accompagnants ainsi que leurs parkings éventuels</p>
+            </div>
+
+            {% if guest.guest_metadata.vendredi == "1" %}{% assign days_string = "vendredi " %}{% endif %}
+            {% if guest.guest_metadata.samedi == "1" %}{% assign days_string = days_string | append:"samedi " %}{% endif %}
+            {% if guest.guest_metadata.dimanche == "1" %}{% assign days_string = days_string | append:"dimanche" %}{% endif %}
+            {% assign days_string = days_string | strip %}
+            {% assign days = days_string | split:" " %}
+
+            {% assign default_number = "1" | append:',' | append:guest.guest_metadata.nb_pilotes | append:',' | append:guest.guest_metadata.nb_accompagnants | append:',' | append:guest.guest_metadata.nb_accompagnants_mineurs %}
+            {% assign default_number = default_number | split:"," %}
+
+            <fieldset>
+              {% assign category_index = -1 %}
+
+              {% for category in categories %}
+                {% assign category_index = category_index | plus:1 %}
+                {% assign linked_guest_index = 0 %}
+                {% assign default_nb = default_number[category_index] | plus:0 %}
+
+                {% if default_nb > 0 %}
+
+                  {% foreach_linked_guest default_nb: default_nb , guest_category_id: category, add: 0, add_label: "Ajouter un participant", remove: 1, remove_label: "Retirer le participant", limit: 20 %}
+
+                    {% assign linked_guest_index = linked_guest_index | plus:1 %}
+
+                    <h2>{{category_names[category_index]}} {% if category_index > 0 %}#{{linked_guest_index}}{% endif %}</h2>
+
+                    {% if category_index == 0 %}
+                    <div class="info-pilote clearfix">
+                      <h3>Informations</h3>
+
+                      {% guest_field last_name "Nom", required: true, data-copy-from:"last_name" %}
+                      {% guest_field first_name "Prénom", required: true, data-copy-from:"first_name" %}
+                      <!-- <div style="clear:both"></div> -->
+                      {% guest_field email "Email", required: true, type: "hidden", data-copy-from:"email"  %}
+                      {% guest_field phone_number "Téléphone", required: true, type: "hidden", data-copy-from:"phone_number" %}
+
+                    </div>
+                    {% elsif category_index == 1 %}
+                    <div class="info-pilote clearfix">
+                      <h3>Informations</h3>
+
+                      {% guest_field last_name "Nom", required: true, data-copy-from:"last_name" %}
+                      {% guest_field first_name "Prénom", required: true, data-copy-from:"first_name" %}
+                      <div style="clear:both"></div>
+                      {% guest_field email "Email", required: true, data-copy-from:"email"  %}
+                      {% guest_field phone_number "Téléphone", required: true, data-copy-from:"email" %}
+
+                    </div>
+                    {% else %}
+
+                    <div class="info-pilote clearfix">
+                    <h3>Informations</h3>
+                    {% guest_field last_name "Nom", required: true, data-copy-from:"last_name" %}
+                    {% guest_field first_name "Prénom", required: true, data-copy-from:"first_name" %}
+
+                    </div>
+                    {% endif %}
+
+
+                    {% assign day_index = 0 %}
+
+                    {% for day in days %}
+
+                      {% assign day_index = day_index | plus:1 %}
+                      <div class="day clearfix">
+                        <h3>{{day | capitalize}}</h3>
+                        <div class="w25">
+                          <p><strong>Inclus :</strong></p>
+                          <ul>
+                            {% if category == categories[0] %}<li>Parking</li>{% endif %}
+                            {% if category == categories[1] %}<li>Forfait Pilote supplémentaire</li>{% endif %}
+                            {% if category != categories[2] %}<li>Entrée sur l'événement</li>{% endif %}
+                            <li>Accueil café et open bar soft toute la journée</li>
+                          </ul>
+                        </div>
+                        <div class="w75">
+                          <div {% if category == categories[1] or category == categories[2] %} class="control-group" {% endif %} {% if category == categories[0] %}style="display:none;"{% endif %}>
+                            <p><strong>Vos options :</strong></p>
+                            {% if category == categories[1] or category == categories[2] %}
+
+                              <label class="control-label">Parking</label>
+                              <div class="controls">
+                                {% for point in sorted_checkin_points %}
+                                  {% if point.traits.jour == day and point.traits.type == "parking" %}
+                                    {% if category == categories[1] or category == categories[2]  %}
+                                      {% checkin_point point.id, label: point.traits.label %}
+                                    {% else %}
+                                      {% checkin_point point.id, label: point.traits.label, checked:true %}
+                                    {% endif %}
+                                  {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                          </div>
+
+                          {% if category == categories[1] %}
+                            <div class="control-group" style="display:none;">
+                              <label class="control-label">Pilote supplémentaire</label>
+                              <div class="controls">
+                                {% for point in sorted_checkin_points %}
+                                  {% if point.traits.jour == day and point.traits.type == "pilote" %}
+                                    {% checkin_point point.id, label: point.traits.label, checked:true %}
+                                  {% endif %}
+                                {% endfor %}
+                              </div>
+                            </div>
+                          {% endif %}
+
+                          {% assign entree_radio_group = day | append:"_entree_" | append: category_index %}
+
+                          <div class="control-group" {% if category != categories[2] %}style="display:none;"{% endif %} >
+                            <label class="control-label">Entrée</label>
+                            <div class="controls">
+                              {% for point in sorted_checkin_points %}
+                                {% if point.traits.jour == day and point.traits.type == "entree" and category != categories[2] %}
+                                  {% checkin_point point.id, label: point.traits.label, checked:true %}
+                                {% elsif point.traits.jour == day and point.traits.type == "entree" %}
+                                  {% checkin_point point.id, label: point.traits.label, radio_group:entree_radio_group , checked:true %}
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                          </div>
+
+                          <div class="control-group" style="display:none;">
+                            <label class="control-label">Café</label>
+                            <div class="controls">
+                              {% for point in sorted_checkin_points %}
+                                {% if point.traits.jour == day and point.traits.type == "cafe" %}
+                                  {% checkin_point point.id, label: point.traits.label, checked:true %}
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                          </div>
+
+                          <div class="control-group">
+                            <label class="control-label">Déjeuner</label>
+                            <div class="controls">
+                              {% for point in sorted_checkin_points %}
+                                {% assign dejeuner_radio_group = day | append:"_dejeuner_" | append: category_index %}
+                                {% if point.traits.jour == day and point.traits.type == "dejeuner" %}
+                                  {% checkin_point point.id, label: point.traits.label, radio_group:dejeuner_radio_group, checked:true %}
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                          </div>
+
+                          {% if day != "dimanche" %}
+                            <div class="control-group">
+                              <label class="control-label">Diner</label>
+                              <div class="controls">
+                                {% assign diner_radio_group = day | append:"_diner_" | append: category_index %}
+                                {% for point in sorted_checkin_points %}
+                                  {% if days.last == day  %}
+                                    {% if point.traits.jour == day and point.traits.type == "diner" %}
+                                    <div class="excl">
+                                      {% checkin_point point.id, label: point.traits.label, checked:false %}
+                                      </div>
+                                    {% endif %}
+                                  {% else %}
+
+                                    {% if point.traits.jour == day and point.traits.type == "diner" %}
+                                    <div class="incl">
+                                      {% checkin_point point.id, label: point.traits.label, radio_group:diner_radio_group, checked:true %}
+                                    </div>
+                                    {% endif %}
+                                  {% endif %}
+                                {% endfor %}
+                              </div>
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    {% endfor %}
+                  {% endforeach_linked_guest %}
+                {% endif %}
+              {% endfor %}
+            </fieldset>
+
+            <div class="form-actions text-center">
+              <a href="{{ guest.registration_form_url }}&etape=inscription" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              <input type="submit" class="btn btn-primary btn-large" value="{{next_step}}" />
+            </div>
+          </div>
+
+        {% elsif url_params.etape == "activites" %}
+
+          <div id="activites">
+            {% redirect_with "etape", "planning_pilote_principal" %}
+
+            {% if higherStep == 'participants' %}
+              {% guest_field higher_step "Étape la plus haute", type: hidden, value: "activites" %}
+            {% endif %}
+            {% guest_field etape "Étape", type: hidden, value: "activites" %}
+
+            {% if guest.guest_metadata.vendredi == "1" %}{% assign days_string = "vendredi " %}{% endif %}
+            {% if guest.guest_metadata.samedi == "1" %}{% assign days_string = days_string | append:"samedi " %}{% endif %}
+            {% if guest.guest_metadata.dimanche == "1" %}{% assign days_string = days_string | append:"dimanche" %}{% endif %}
+            {% assign days_string = days_string | strip %}
+            {% assign days = days_string | split:" " %}
+
+            <h1 class="tc">Activités</h1>
+            <div class="tc maauto w75 mw80">
+              <p>Votre inscription ne sera enregsitrée qu'une fois que vous aurez choisi l'horaire</p>
+              {% editable_text "Entête étape activités", type: cktext_area, priority: 68 %}<p>Choisissez votre activité aux jours et heures qui vous conviennent</p>{% endeditable_text %}
+              {% assign category_index = -1 %}
+            </div>
+
+            <fieldset>
+
+              {% for category in categories %}
+                {% if forloop.last == false %}
+                  {% assign category_index = category_index | plus:1 %}
+                  {% assign linked_guest_index = 0 %}
+
+                  {% foreach_linked_guest default_nb: 0 , guest_category_id: category, add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
+                    {% assign linked_guest_index = linked_guest_index | plus:1 %}
+
+                    <div style="vertical-align: middle;">
+                      <h2>{{category_names[category_index]}} {% if category_index > 0 %}#{{linked_guest_index}}{% endif %}</h2>
+                    </div>
+                    <div class="row--fluid clearfix">
+                      <!-- <div class=""><p><strong>Souhaitez-vous vous inscrire :</strong></p></div> -->
+                      <div class="w100">
+                        <div class="inner-box clearfix">
+                          <h2>Bapteme Bugatti</h2>
+                          <p>Baptême sur le circuit Bugatti, 2 tours en passsager avec un pilote professionnel.<br>
+                            Accès à EXCLUSIVE DRIVE : entrée et parking offerts! Se présenter impérativement 10 minutes avant le début de son baptême - 16 ans minimum.</p>
+                          <!-- {% guest_checkbox_field bapteme_bugatti "Bapteme Bugatti" %}
+                          <div data-show-if="bapteme_bugatti==1"> -->
+
+                          <div class="media">
+                            <div class="pull-left span3">
+                              <!-- https://60b14107.ngrok.io/img/ -->
+                              <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018//img/ProtoLeMans.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field bapteme_bugatti_prototype_pescarolo "<h4>Baptême en <b>Prototype Pescarolo Le Mans</b> <em>- 199,00 EUR TTC</em></h4> 360cv - Boite séquentielle - 850kg - Des sensations comme aux 24 Heures du Mans !" %}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="media">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018//img/RadicalBapt%C3%AAme.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field bapteme_bugatti_prototype_radical "<h4>Baptême en <b>Prototype Radical SR3 SL</b><em>- 159,00 EUR TTC</em></h4> 300cv - Boite séquentielle - 725kg - Plus rapide qu'une Porsche GT2 RS !" %}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="media">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018//img/LameraCup.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field bapteme_bugatti_prototype_lamera "<h4>Baptême en <b>Lamera Cup</b> <em>- 129,00 EUR TTC</em></h4> 300 cv - Boite séquentielle - 910kg - Une vraie voiture de course !" %}
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- </div> -->
+                        </div>
+                      </div>
+
+                      <div class="w100">
+                        <div class="inner-box clearfix">
+                          <h2>Stage de pilotage Bugatti</h2>
+                          <p>Stage de pilotage sur le circuit Bugatti <br>
+                            Session de 30 mn : 15 mn de briefing + 15 mn de roulage avec un coach
+                            Accès à EXCLUSIVE DRIVE : entrée et parking offerts ! Se présenter impérativement 15 minutes avant le début de son stage</p>
+
+                            <div class="media">
+                              <div class="pull-left span3">
+                                <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018//img/LamborghiniHuracan.jpg">
+                              </div>
+                              <div class="media-body">
+                                <div class="media">
+                                  {% guest_checkbox_field stage_bugatti_lamborghini "<h4>Stage de pilotage <b>Lamborghini Huracan Performante</b> <em>- 399,00 EUR TTC</em></h4> V10 / 5,2L 640cv - Boîte double embrayage 7 rapports - 1382 kg - 0 à 100 km/h en 2,9 sec - Une occasion unique de piloter une voiture d'exception sur le Bugatti, inoubliable ! <div class='fran'>Franchise: 4000 €</div>" %}
+                                </div>
+                              </div>
+                            </div>
+
+                          <div class="media">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018//img/AlpineA110.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field stage_bugatti_alpine "<h4>Stage de pilotage <b>Alpine A110</b> <em>- 349,00 EUR TTC </em></h4>4 cyl / 1,8L Turbo 250cv - Boîte palettes au volant - 1100 kg - 0 à 100 km/h en 4,5 sec - La légende Alpine, d'une agilité absolue <div class='fran'>Franchise: 3000 €</div>" %}
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <div class="w100">
+                        <div class="inner-box clearfix">
+                          <h2>Stage de pilotage Maison Blanche</h2>
+                          <p>Stage de pilotage sur le circuit de Maison Blanche en version 3km, au tracé très rapide et technique, reprenant le célèbre virage Corvette du circuit des 24 Heures.<br>
+                            Session de 30 mn : 15 mn de briefing + 15 mn de roulage avec un coach. <br>
+                            Accès à EXCLUSIVE DRIVE : entrée et parking offerts ! Se présenter impérativement 15 minutes avent le début de son stage - minimum 18 ans, permis de conduire + caution.</p>
+                          <!-- {% guest_checkbox_field stage_maison_blanche "Stage Maison Blanche" %}
+                          <div data-show-if="stage_maison_blanche==1"> -->
+                          <div class="media">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018/img/Ferrari458Sp%C3%A9ciale.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field stage_maison_blanche_ferrari "<h4>Stage de pilotage <b>FERRARI 458 Spéciale</b> <em>- 299,00 EUR TTC</em></h4>V8 / 4,5L 605cv - Boîte double embrayage 7 rapports - 1395 kg - 0 à 100 km/h en 3 sec - Pneus semi-slick - Pilotez le mythe Ferrari au Mans! <div class='fran'>Franchise: 4000 €</div>" %}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="media">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018/img/Porsche-991-GT3-RS.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field stage_maison_blanche_porsche "<h4>Stage de pilotage <b>PORSCHE 991 GT3 RS</b> <em>- 299,00 EUR TTC</em></h4> Flat 6 / 4,0L 500cv - Boîte double embrayage 7 rapports - 1495 kg - 0 à 100 km/h en 3,3 sec - Pneus semi-slick -  Exceptionnel une pure voiture de piste comme Porsche sait si bien les faire. <div class='fran'>Franchise: 4000 €</div>" %}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="media">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018/img/AudiR8GT.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field stage_maison_blanche_audi "<h4>Stage de pilotage <b>AUDI R8 GT</b> <em>- 279,00 EUR TTC</em></h4> V10 / 5,2L 580cv - Boîte séquentielle 6 rapports - 1525 kg - 0 à 100 km/h en 3,6 sec - Pilotez l'Audi la plus pistarde au Mans ! <div class='fran'>Franchise: 2000 €</div>"   %}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="media">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018/img/LotusExigeV6.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field stage_maison_blanche_lotus "<h4>Stage de pilotage <b>LOTUS EXIGE V6</b> <em>- 249,00 EUR TTC</em></h4> V6 / 3,5L 350cv - Boîte manuelle 6 rapports - 1066 kg - 0 à 100 km/h en 3,7 sec - Pneus semi-slick - On dit que c'est une chasseuse de chronomètre au chassis très affuté ! <div class='fran'>Franchise: 2000 €</div>"   %}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="media">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018/img/KTM-X-Bow-RR.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field stage_maison_blanche_ktm "<h4>Stage de pilotage <b>KTM XBOW R</b> <em>- 239,00 EUR TTC</em></h4> 4 Cyl / 2,0L 300cv - Boîte manuelle 6 rapports - 800 kg - 0 à 100 km/h en 3,9 sec - Pneus semi-slick - Une machine à sensations fortes et directs ! <div class='fran'>Franchise: 4000 €</div>"   %}
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- ADD Megane 4 RS -->
+                          <div class="media">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018/img/Megane4RS.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field stage_maison_blanche_renault "<h4>Stage de pilotage <b>RENAULT MEGANE 4 RS</b> <em>- 199,00 EUR TTC</em></h4>4 Cyl / 2,0L 280cv - Boîte double embrayage 6 rapports - 1430 kg - 0 à 100 km/h en 5,9 sec - La plus méchante de toutes les Meganes jamais produite <div class='fran'>Franchise: 2000 €</div>"  %}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- ADD Megane 4 RS -->
+
+
+
+                          <!-- </div> -->
+                        </div>
+                      </div>
+
+                      <div class="w100">
+                        <div class="inner-box clearfix">
+                          <h2>Course de kart</h2>
+                          <p>Réservez votre course de Kart, en une heure: Accueil + équipement + briefing + 5 minutes d’essais libres + 5 minutes d’essais chronométrés + 25 minutes de course sprint - PODIUM pour les 3 premiers des jolis lots à gagner… Grosse attaque et du fun pour tout le monde !</p>
+                          <div class="media">
+                            <div class="pull-left span3">
+                              <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018/img/kart.jpg">
+                            </div>
+                            <div class="media-body">
+                              <div class="media">
+                                {% guest_checkbox_field course_kart "<h4 style='display:inline-block'><b>Course de kart</b> <em>- 150,00 EUR TTC</em></h4>" %}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {% if category == categories[0] %}
+                        <div class="w100">
+                          <div class="inner-box clearfix">
+                            <h2>Concours d'élégance</h2>
+                            <p>Dimanche 24/3 uniquement, 30 participants maximum, accès au parc fermé sur la piste à 12H, remise des prix à 13H20 et parade des autos à 13H40. Des récompenses d'exception pour les vainqueurs des 5 catégories La plus Puissante, Belle monte de pneus, Brillante, Rétro et la plus Exclusive… Séjours au Byblos de Saint Tropez, Champagne,…<br> Accès à EXCLUSIVE DRIVE : entrée et parking du concours inclus !</p>
+                            <div class="media">
+                              <div class="pull-left span3">
+                                <img class="media-object" src="https://laurent-d.github.io/em_exclusive-drive_2018/img/concours+elegance.jpg">
+                              </div>
+                              <div class="media-body">
+                                <div class="media">
+                                  {% guest_checkbox_field elegance "<h4><b>Concours d'élégance « Qui à la plus… ? »</b> <em>- 125,00 EUR TTC</em></h4> Exposition et défilé sur la ligne droite de départ des 24H" %}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {% endif %}
+                    </div>
+                  <!-- </div>
+                  </div> -->
+                  {% endforeach_linked_guest %}
+                {% endif %}
+              {% endfor %}
+
+            </fieldset>
+
+            <div class="form-actions text-center">
+              <a href="{{ guest.registration_form_url }}&etape=participants" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              <input type="submit" class="btn btn-primary btn-large" value="{{next_step}}" />
+            </div>
+          </div>
+
+        {% elsif url_params.etape == "planning_pilote_principal" %}
+
+        {% if guest.guest_metadata.nb_pilotes == "" and guest.guest_metadata.nb_accompagnants == "" %}
+          {% redirect_with "etape", "planning_sessions_roulage" %}
+        {% elsif guest.guest_metadata.nb_accompagnants == "" %}
+          {% redirect_with "etape", "planning_accompagnants" %}
+        {% else %}
+          {% redirect_with "etape", "planning_pilotes_additionnels" %}
+        {% endif %}
+
+
+        {% if guest.guest_metadata.nb_pilotes == "" and guest.guest_metadata.nb_accompagnants == "" %}
+          <script>console.log("vers roulage")</script>
+        {% elsif guest.guest_metadata.nb_accompagnants == "" %}
+          <script>console.log("vers accompagnants")</script>
+        {% else %}
+          <script>console.log("vers pilotes add")</script>
+        {% endif %}
+
+          {% if higherStep == 'activites' %}
+            {% guest_field higher_step "Étape la plus haute", type: hidden, value: "planning_pilote_principal" %}
+          {% endif %}
+
+          <div id="planning_pilote_principal">
+            <h1 class="tc">Planning Pilote Principal</h1>
+
+            {% if guest.guest_metadata.vendredi == "1" %}{% assign days_string = "vendredi " %}{% endif %}
+            {% if guest.guest_metadata.samedi == "1" %}{% assign days_string = days_string | append:"samedi " %}{% endif %}
+            {% if guest.guest_metadata.dimanche == "1" %}{% assign days_string = days_string | append:"dimanche" %}{% endif %}
+            {% assign days_string = days_string | strip %}
+            {% assign days = days_string | split:" " %}
+
+            <fieldset>
+              {% foreach_linked_guest default_nb: 0 , guest_category_id: categories.first, add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
+                <h2>{{linked_guest.guest_category.name}} Principal</h2>
+                {% comment %}<h2>{{linked_guest.guest_category.name}} #{{linked_guest_index}} {% if category_index == 0 %}: {{linked_guest.identity}} {% endif %}</h2>{% endcomment %}
+
+                {% assign activite = "" %}
+
+                {% if linked_guest.guest_metadata.bapteme_bugatti_prototype_pescarolo == "1" %} {% assign activite = activite | append:"bapteme_bugatti_prototype_pescarolo "%} {% endif%}
+                {% if linked_guest.guest_metadata.bapteme_bugatti_prototype_radical == "1" %} {% assign activite = activite | append:"bapteme_bugatti_prototype_radical "%} {% endif%}
+                {% if linked_guest.guest_metadata.bapteme_bugatti_prototype_lamera == "1" %} {% assign activite = activite | append:"bapteme_bugatti_prototype_lamera "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_bugatti_alpine == "1" %} {% assign activite = activite | append:"stage_bugatti_alpine "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_bugatti_lamborghini == "1" %} {% assign activite = activite | append:"stage_bugatti_lamborghini "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_ferrari == "1" %} {% assign activite = activite | append:"stage_maison_blanche_ferrari "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_porsche == "1" %} {% assign activite = activite | append:"stage_maison_blanche_porsche "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_ktm == "1" %} {% assign activite = activite | append:"stage_maison_blanche_ktm "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_lotus == "1" %} {% assign activite = activite | append:"stage_maison_blanche_lotus "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_audi == "1" %} {% assign activite = activite | append:"stage_maison_blanche_audi "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_renault == "1" %} {% assign activite = activite | append:"stage_maison_blanche_renault "%} {% endif%}
+                {% if linked_guest.guest_metadata.course_kart == "1" %} {% assign activite = activite | append:"course_kart "%} {% endif%}
+                {% if linked_guest.guest_metadata.elegance == "1" %} {% assign activite = activite | append:"elegance "%} {% endif%}
+
+                {% if activite != "" %}
+
+                  {% for day in days %}
+
+                    <h3>{{day | capitalize}}</h3>
+                    <div class="control-group programm-checkbox">
+                      <label class="control-label">Activités</label>
+                      <div class="controls">
+                        <div class="first">
+                          {% for point in sorted_checkin_points %}
+
+                            {% assign val = point.traits.heure | remove: "h" %}
+
+                            {% if point.traits.jour == day and activite contains point.traits.type %}
+                              {% if point.traits.radiogroup != radio_group %}
+                                <hr />
+                                <div style="clear:both;"><h3>{{ point.traits.label }}</h3></div>
+                              {% endif %}
+                              {% assign radio_group = point.traits.radiogroup %}
+                              {% assign val = point.traits.heure | remove: "h" %}
+
+                              <div data="{{ val }}">
+                                {% checkin_point point.id, label: point.traits.heure %}
+                                <span data-starttime="{{ point.traits.heure | remove: 'h' | plus: 0 }}" data-endtime="{{ point.traits.heure | remove: 'h' | plus: 20 }}"></span>
+                              </div>
+
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                        {% assign radio_group = "" %}
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  <p>Aucune activité prévue pour ce participant</p>
+                {% endif %}
+              {% endforeach_linked_guest %}
+            </fieldset>
+
+            <div class="form-actions text-center">
+              <a href="{{ guest.registration_form_url }}&etape=activites" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              <input type="submit" class="btn btn-primary btn-large" value="{{next_step}}" />
+            </div>
+
+          </div>
+
+        {% elsif url_params.etape == "planning_pilotes_additionnels" %}
+
+          {% if guest.guest_metadata.nb_accompagnants == "" %}
+            {% redirect_with "etape", "planning_sessions_roulage" %}
+          {% else %}
+            {% redirect_with "etape", "planning_accompagnants" %}
+          {% endif %}
+
+          {% comment %}{% redirect_with "etape", "planning_accompagnants" %}{% endcomment %}
+
+          {% if higherStep == 'planning_pilote_principal' %}
+            {% guest_field higher_step "Étape la plus haute", type: hidden, value: "planning_pilotes_additionnels" %}
+          {% endif %}
+
+          <div id="planning_pilotes_additionnels">
+            <h1 class="tc">Planning Pilotes Supplémentaires</h1>
+
+            {% if guest.guest_metadata.vendredi == "1" %}{% assign days_string = "vendredi " %}{% endif %}
+            {% if guest.guest_metadata.samedi == "1" %}{% assign days_string = days_string | append:"samedi " %}{% endif %}
+            {% if guest.guest_metadata.dimanche == "1" %}{% assign days_string = days_string | append:"dimanche" %}{% endif %}
+            {% assign days_string = days_string | strip %}
+            {% assign days = days_string | split:" " %}
+
+            <fieldset>
+              {% foreach_linked_guest default_nb: 0 , guest_category_id: categories[1], add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
+              {% assign linked_guest_index = linked_guest_index | plus:1 %}
+                <h2>{{linked_guest.guest_category.name}} #{{linked_guest_index}} </h2>
+                {% assign activite = "" %}
+
+                {% if linked_guest.guest_metadata.bapteme_bugatti_prototype_pescarolo == "1" %} {% assign activite = activite | append:"bapteme_bugatti_prototype_pescarolo "%} {% endif%}
+                {% if linked_guest.guest_metadata.bapteme_bugatti_prototype_radical == "1" %} {% assign activite = activite | append:"bapteme_bugatti_prototype_radical "%} {% endif%}
+                {% if linked_guest.guest_metadata.bapteme_bugatti_prototype_lamera == "1" %} {% assign activite = activite | append:"bapteme_bugatti_prototype_lamera "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_bugatti_alpine == "1" %} {% assign activite = activite | append:"stage_bugatti_alpine "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_bugatti_lamborghini == "1" %} {% assign activite = activite | append:"stage_bugatti_lamborghini "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_ferrari == "1" %} {% assign activite = activite | append:"stage_maison_blanche_ferrari "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_porsche == "1" %} {% assign activite = activite | append:"stage_maison_blanche_porsche "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_ktm == "1" %} {% assign activite = activite | append:"stage_maison_blanche_ktm "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_lotus == "1" %} {% assign activite = activite | append:"stage_maison_blanche_lotus "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_audi == "1" %} {% assign activite = activite | append:"stage_maison_blanche_audi "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_renault == "1" %} {% assign activite = activite | append:"stage_maison_blanche_renault "%} {% endif%}
+                {% if linked_guest.guest_metadata.course_kart == "1" %} {% assign activite = activite | append:"course_kart "%} {% endif%}
+                {% if linked_guest.guest_metadata.elegance == "1" %} {% assign activite = activite | append:"elegance "%} {% endif%}
+
+                {% if activite != "" %}
+
+                  {% for day in days %}
+                    <h3>{{day | capitalize }}</h3>
+                    <div class="control-group programm-checkbox">
+                      <label class="control-label">Activités</label>
+                      <div class="controls">
+                        <div class="first">
+                          {% for point in sorted_checkin_points %}
+
+                            {% assign val = point.traits.heure | remove: "h" %}
+
+                            {% if point.traits.jour == day and activite contains point.traits.type %}
+                              {% if point.traits.radiogroup != radio_group %}
+                                <hr />
+                                <div style="clear:both;"><h3>{{ point.traits.label }}</h3></div>
+                              {% endif %}
+                              {% assign radio_group = point.traits.radiogroup %}
+                              {% assign val = point.traits.heure | remove: "h" %}
+
+                              <div data="{{ val }}">
+                                {% checkin_point point.id, label: point.traits.heure %}
+                                <span data-starttime="{{ point.traits.heure | remove: 'h' | plus: 0 }}" data-endtime="{{ point.traits.heure | remove: 'h' | plus: 20 }}"></span>
+                              </div>
+
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                        {% assign radio_group = "" %}
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  <p>Aucune activité prévue pour ce participant</p>
+                {% endif %}
+              {% endforeach_linked_guest %}
+            </fieldset>
+
+            <div class="form-actions text-center">
+              <a href="{{ guest.registration_form_url }}&etape=planning_pilote_principal" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              <input type="submit" class="btn btn-primary btn-large" value="{{next_step}}" />
+            </div>
+
+          </div>
+        {% elsif url_params.etape == "planning_accompagnants" %}
+
+          {% redirect_with "etape", "planning_sessions_roulage" %}
+          {% if higherStep == 'planning_pilotes_additionnels' %}
+            {% guest_field higher_step "Étape la plus haute", type: hidden, value: "planning_accompagnants" %}
+          {% endif %}
+
+          <div id="planning_accompagnants">
+            <h1 class="tc">Planning Accompagnants</h1>
+
+            {% if guest.guest_metadata.vendredi == "1" %}{% assign days_string = "vendredi " %}{% endif %}
+            {% if guest.guest_metadata.samedi == "1" %}{% assign days_string = days_string | append:"samedi " %}{% endif %}
+            {% if guest.guest_metadata.dimanche == "1" %}{% assign days_string = days_string | append:"dimanche" %}{% endif %}
+            {% assign days_string = days_string | strip %}
+            {% assign days = days_string | split:" " %}
+
+            <fieldset>
+
+              {% foreach_linked_guest default_nb: 0 , guest_category_id: categories[2], add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
+              {% assign linked_guest_index = linked_guest_index | plus:1 %}
+                <h2>{{linked_guest.guest_category.name}} #{{linked_guest_index}} </h2>
+                {% assign activite = "" %}
+
+                {% if linked_guest.guest_metadata.bapteme_bugatti_prototype_pescarolo == "1" %} {% assign activite = activite | append:"bapteme_bugatti_prototype_pescarolo "%} {% endif%}
+                {% if linked_guest.guest_metadata.bapteme_bugatti_prototype_radical == "1" %} {% assign activite = activite | append:"bapteme_bugatti_prototype_radical "%} {% endif%}
+                {% if linked_guest.guest_metadata.bapteme_bugatti_prototype_lamera == "1" %} {% assign activite = activite | append:"bapteme_bugatti_prototype_lamera "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_bugatti_alpine == "1" %} {% assign activite = activite | append:"stage_bugatti_alpine "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_bugatti_lamborghini == "1" %} {% assign activite = activite | append:"stage_bugatti_lamborghini "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_ferrari == "1" %} {% assign activite = activite | append:"stage_maison_blanche_ferrari "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_porsche == "1" %} {% assign activite = activite | append:"stage_maison_blanche_porsche "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_ktm == "1" %} {% assign activite = activite | append:"stage_maison_blanche_ktm "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_lotus == "1" %} {% assign activite = activite | append:"stage_maison_blanche_lotus "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_audi == "1" %} {% assign activite = activite | append:"stage_maison_blanche_audi "%} {% endif%}
+                {% if linked_guest.guest_metadata.stage_maison_blanche_renault == "1" %} {% assign activite = activite | append:"stage_maison_blanche_renault "%} {% endif%}
+                {% if linked_guest.guest_metadata.course_kart == "1" %} {% assign activite = activite | append:"course_kart "%} {% endif%}
+                {% if linked_guest.guest_metadata.elegance == "1" %} {% assign activite = activite | append:"elegance "%} {% endif%}
+
+                {% if activite != "" %}
+
+                  {% for day in days %}
+                    <h3>{{day | capitalize }}</h3>
+                    <div class="control-group programm-checkbox">
+                      <label class="control-label">Activités</label>
+                      <div class="controls">
+                        <div class="first">
+                          {% for point in sorted_checkin_points %}
+
+                            {% assign val = point.traits.heure | remove: "h" %}
+
+                            {% if point.traits.jour == day and activite contains point.traits.type %}
+                              {% if point.traits.radiogroup != radio_group %}
+                                <hr />
+                                <div style="clear:both;"><h3>{{ point.traits.label }}</h3></div>
+                              {% endif %}
+                              {% assign radio_group = point.traits.radiogroup %}
+                              {% assign val = point.traits.heure | remove: "h" %}
+
+                              <div data="{{ val }}">
+                                {% checkin_point point.id, label: point.traits.heure %}
+                                <span data-starttime="{{ point.traits.heure | remove: 'h' | plus: 0 }}" data-endtime="{{ point.traits.heure | remove: 'h' | plus: 20 }}"></span>
+                              </div>
+
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                        {% assign radio_group = "" %}
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  <p>Aucune activité prévue pour ce participant</p>
+                {% endif %}
+              {% endforeach_linked_guest %}
+            </fieldset>
+
+            <div class="form-actions text-center">
+
+              {% if guest.guest_metadata.nb_pilotes == "" %}
+              <a href="{{ guest.registration_form_url }}&etape=planning_pilote_principal" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              {% else %}
+              <a href="{{ guest.registration_form_url }}&etape=planning_pilotes_additionnels" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              {% endif %}
+              {% comment %}
+              <a href="{{ guest.registration_form_url }}&etape=planning_pilotes_additionnels" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              {% endcomment %}
+              <input type="submit" class="btn btn-primary btn-large" value="{{next_step}}" />
+            </div>
+          </div>
+
+        {% elsif url_params.etape == "planning_sessions_roulage" %}
+
+          {% redirect_with "etape", "recapitulatif" %}
+          {% if higherStep == 'planning_accompagnants' %}
+            {% guest_field higher_step "Étape la plus haute", type: hidden, value: "planning_sessions_roulage" %}
+          {% endif %}
+
+          <div id="planning_sessions_roulage">
+            <h1 class="tc">Planning Sessions de Roulage</h1>
+
+            {% if guest.guest_metadata.vendredi == "1" %}{% assign days_string = "vendredi " %}{% endif %}
+            {% if guest.guest_metadata.samedi == "1" %}{% assign days_string = days_string | append:"samedi " %}{% endif %}
+            {% if guest.guest_metadata.dimanche == "1" %}{% assign days_string = days_string | append:"dimanche" %}{% endif %}
+
+            {% assign days_string = days_string | strip %}
+            {% assign days = days_string | split:" " %}
+
+            <fieldset>
+              {% foreach_linked_guest default_nb: 0 , guest_category_id: categories.first, add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
+
+                {% for day in days %}
+                  <h2>{{day | capitalize }}</h2>
+                  <p><strong>Vos options :</strong></p>
+                  <div class="control-group assurance">
+                    <label class="control-label">Assurance</label>
+                    <div class="controls">
+                      {% for point in sorted_checkin_points %}
+                        {% if point.traits.jour == day and point.traits.type == "assurance" %}
+                          {% checkin_point point.id, label: point.traits.label %}
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+
+                  <div class="control-group programm-checkbox">
+                    <label class="control-label">Activités</label>
+                    <div class="controls">
+                      <div style="display:none;">
+                        {% for point in sorted_checkin_points %}
+                          {% if point.traits.category == "activite" and point.traits.jour == day %}
+                            <div class="controls">
+                              {% capture label %}{{point.traits.jour}} - {{point.traits.label}} - {{ point.traits.heure }}{% endcapture %}
+                              {% checkin_point point.id, label: label %}
+                              <span data-starttime="{{ point.traits.heure_session_deb | remove: 'h' }}" data-endtime="{{ point.traits.heure_session_fin | remove: 'h' }}"></span>
+                            </div>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                      <div>
+                        {% for point in sorted_checkin_points %}
+
+                          {% assign val = point.traits.heure | remove: "h" %}
+
+                          {% if point.traits.jour == day and point.traits.type == "session_roulage" %}
+                            {% if point.traits.radiogroup != radio_group %}
+                              <hr />
+                              <div style="clear:both;"><h3>{{ point.traits.label }}</h3></div>
+                              <span class="clearfix"></span>
+                            {% endif %}
+                            {% assign radio_group = point.traits.radiogroup %}
+                            {% assign val = point.traits.heure | remove: "h" %}
+
+                            <div data="{{ val }}">
+                              {% capture label %}{{point.traits.heure}} {% if point.traits.type_public != blank %}- {{point.traits.type_public}}{% endif %}{% endcapture %}
+                              {% checkin_point point.id, label: label, display_remaining: true %}
+                              <span data-starttime="{{ point.traits.heure | remove: 'h' }}" data-endtime="{{ point.traits.heure_fin | remove: 'h' }}"></span>
+                            </div>
+
+                            {% assign value-prev= value-curr %}
+
+                          {% endif %}
+                        {% endfor %}
+                        {% assign radio_group = "" %}
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endforeach_linked_guest %}
+
+            </fieldset>
+
+            <div class="form-actions text-center">
+
+              {% if guest.guest_metadata.nb_pilotes == "" and guest.guest_metadata.nb_accompagnants == "" %}
+              <a href="{{ guest.registration_form_url }}&etape=planning_pilote_principal" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              {% elsif guest.guest_metadata.nb_accompagnants == "" %}
+                <a href="{{ guest.registration_form_url }}&etape=planning_pilotes_additionnels" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              {% else %}
+              <a href="{{ guest.registration_form_url }}&etape=planning_accompagnants" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              {% endif %}
+              {% comment %}
+              <a href="{{ guest.registration_form_url }}&etape=planning_accompagnants" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              {% endcomment %}
+              <input type="submit" class="btn btn-primary btn-large" value="{{next_step}}" />
+            </div>
+          </div>
+
+        {% elsif url_params.etape == "recapitulatif" %}
+
+          {% if higherStep == 'planning_sessions_roulage' %}
+            {% guest_field higher_step "Étape la plus haute", type: hidden, value: "recapitulatif" %}
+          {% endif %}
+
+          <div id="recapitulatif">
+
+            <h1 class="tc">Récapitulatif de commande</h1>
+
+            {% if guest.guest_metadata.vendredi == "1" %}{% assign days_string = "vendredi " %}{% endif %}
+            {% if guest.guest_metadata.samedi == "1" %}{% assign days_string = days_string | append:"samedi " %}{% endif %}
+            {% if guest.guest_metadata.dimanche == "1" %}{% assign days_string = days_string | append:"dimanche" %}{% endif %}
+            {% assign days_string = days_string | strip %}
+            {% assign days = days_string | split:" " %}
+
+            {% guest_field etape "Étape", type: hidden, value: "recapitulatif" %}
+
+            <div class="tc maauto w75 mw80">
+              {% editable_text "Entête Récapitulatif Panier", type: cktext_area, priority: 64 %}Entête Récapitulatif Panier{% endeditable_text %}
+            </div>
+            {% assign category_index = -1 %}
+            {% for category in categories %}
+              {% assign category_index = category_index | plus:1 %}
+              {% assign linked_guest_index = 0 %}
+              {% foreach_linked_guest default_nb: 0 , guest_category_id: category, add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
+                {% assign linked_guest_index = linked_guest_index | plus:1 %}
+                <!-- <h2>{{linked_guest.guest_category.name}} #{{linked_guest_index}} {% if category_index == 1 %}: {{linked_guest.identity}} {% endif %}</h2> -->
+                <h2>{{category_names[category_index]}} {% if category_index > 0 %}#{{linked_guest_index}}{% endif %}</h2>
+                {% comment %}{% assign sorted_access_privileges = linked_guest.access_privileges | sort:accesspoint_name %}{% endcomment %}
+
+                <!-- <p>Inscription :</p> -->
+                {% for day in days %}
+                  <hr />
+                  <h3>{{day | capitalize }}</h3>
+                  <h4>Billets d'entrée</h4>
+
+                  {% for access_privilege in linked_guest.access_privileges %}
+                      {% if access_privilege.accesspoint_traits.jour == day and access_privilege.accesspoint_traits.category == "entree" %}
+                      <p>{{access_privilege.accesspoint_traits.label}}</p>
+                      {% endif %}
+                  {% endfor %}
+
+                  {% comment %}
+                  {% for access_privilege in linked_guest.access_privileges %}
+                    {% if access_privilege.accesspoint_traits.jour == day and access_privilege.accesspoint_traits.category == "entree" %}
+                    {% endif %}
+                  {% endfor %}
+                  {% endcomment %}
+
+                  {% unless category == categories[3] %}
+                  <h4>Activités</h4>
+                  {% assign count_nb_activites = 0 %}
+
+                  {% for access_privilege in linked_guest.access_privileges %}
+                    {% if access_privilege.accesspoint_traits.jour == day and access_privilege.accesspoint_traits.category == "activite" %}
+                      <p>{{access_privilege.accesspoint_traits.jour | capitalize }} - {{access_privilege.accesspoint_traits.heure}} : {{access_privilege.accesspoint_traits.label}}</p>
+                      {% assign count_nb_activites = count_nb_activites | plus: 1 %}
+                    {% endif %}
+                  {% endfor %}
+                  {% if count_nb_activites == 0 %}
+                  <p>Aucune activité prévue</p>
+                  {% endif %}
+                  {% endunless %}
+
+                  {% if category == categories[0] %}
+                    <div class="control-group programm-checkbox">
+                      <!-- <label class="control-label">Moniteurs</label> -->
+                      <div class="controls">
+                        {% assign order_linked_guest_access_privileges = linked_guest.access_privileges | sort: "trait_heure" %}
+                        {% for session in order_linked_guest_access_privileges %}
+                          {% if session.accesspoint_traits.type == "session_roulage" and session.accesspoint_traits.jour == day %}
+                            <p>{{session.accespoint_traits.heure}}</p>
+                            {% for point in sorted_checkin_points %}
+
+                              {% if point.traits.jour == day and point.traits.type == "moniteur" and point.traits.heure == session.accesspoint_traits.heure %}
+
+                              {% assign val = point.traits.heure | remove: "h" %}
+                                <div data="{{val}}">
+                                  {% capture label %}{{point.traits.heure}} - {{point.traits.label}}{% endcapture %}
+                                  {% checkin_point point.id, label: label, display_remaining: true %}
+                                  <span data-starttime="{{ point.traits.heure | remove: 'h' }}" data-endtime="{{ point.traits.heure_fin | remove: 'h' }}"></span>
+                                </div>
+
+                              {% endif %}
+                            {% endfor %}
+
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              {% endforeach_linked_guest %}
+            {% endfor %}
+
+            {% comment %}
+            {% foreach_linked_guest default_nb: 0 , guest_category_id: categories.first, add: 0, add_label: "Ajouter un participant", remove: 0, remove_label: "Retirer le participant", limit: 20 %}
+            {% endforeach_linked_guest %}
+            {% endcomment %}
+
+            <div class="form-actions text-center">
+              <a href="{{ guest.registration_form_url }}&etape=planning_sessions_roulage" class="btn btn-primary btn-large btn-back">{{ previous_step }}</a>
+              <input type="submit" class="btn btn-primary btn-large" value="{{next_step}}" />
+            </div>
+          </div>
+
+        {% endif %}
+      </div>
+
+      {{ registration_form_end }}
+
+    </div>
+
+    {% if event.grey_label_enabled %}
+      <p class="grey-label">{{ event.grey_label }}</p>
+    {% endif %}
+
+    <script type="text/javascript" src="https://applidget.github.io/vx-assets/shared/js/iframe-resizer/iframeResizer.contentWindow.min.js"></script>
+    <script type="text/javascript" src="https://applidget.github.io/vx-assets/shared/js/text-validation/1.1.1/text-validation.js"></script>
+    <script src='https://applidget.github.io/vx-assets/shared/js/show-if/1.3.1/show-if.js'></script>
+    <script src="https://applidget.github.io/vx-assets/shared/js/datetime-overlapse/1.2.1/datetime-overlapse.js"></script>
+    <script type="text/javascript" src="https://applidget.github.io/assets/shared/ticketing_module/ticketing_module.js"></script>
+    <!-- <script type="text/javascript" src="https://ojansen.serveo.net/vx-assets/orgs/exclusive-drive/2018/billetterie-exclusive-drive/js/main.js"></script> -->
+    <!-- <script type="text/javascript" src="https://60b14107.ngrok.io/js/main.js"></script> -->
+    <script type="text/javascript" src="https://laurent-d.github.io/em_exclusive-drive_2018/js/main.js"></script>
+
+  </body>
+</html>

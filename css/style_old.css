@@ -19,10 +19,6 @@ body {
   font-weight: 400;
 }
 
-.main-guest-field-to-copy {
-  display: none;
-}
-
 .with-max-width {
   margin-top: 0;
   background-color: inherit;
@@ -697,7 +693,7 @@ hr {
 @media screen and (max-width: 640px) {
 
   h1, #inscription h1{
-    font-size:35px;
+  font-size:35px;
   }
 
   .w50, .w40, .w25, .w33, .w75 {
@@ -725,24 +721,24 @@ hr {
   .btn-large+.btn-large {
     margin-left: 0;
     margin-top: 2em;
+}
+}
+
+  select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    display: block;
+    box-sizing: border-box;
+    height: auto;
   }
-}
+  .caddie-container {
+    float: none;
+    margin-top: 0;
+    padding:2.5em;
+    box-sizing: border-box;
+  }
 
-select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-  display: block;
-  box-sizing: border-box;
-  height: auto;
-}
-.caddie-container {
-  float: none;
-  margin-top: 0;
-  padding:2.5em;
-  box-sizing: border-box;
-}
-
-.remove-linked-guest{
-  display: none;
-}
+  .remove-linked-guest{
+    display: none;
+  }
 
 .incl .check-in-point-price:after {
   content: 'Inclus';
@@ -750,11 +746,11 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
   padding-right: 0.4em;
   padding-bottom: 0.2em;
   padding-left: 0.4em;
-  background-color: black;
-  /* border-radius: .2em; */
-  margin-left: .5em;
-  color: white;
-  font-style: initial;
+background-color: black;
+/* border-radius: .2em; */
+margin-left: .5em;
+color: white;
+font-style: initial;
 }
 .excl .check-in-point-price:after {
   content: 'En option';
@@ -790,7 +786,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 }
 
 .media {
-  margin-top: 30px;
+    margin-top: 30px;
 }
 
 /* .media .span2, .media .span3 {
@@ -799,11 +795,11 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 } */
 
 .media .span2, .media .span3 {
-  overflow: hidden;
-  margin-left: 0;
-  display: inline-block;
-  vertical-align: middle;
-  float: none;
+    overflow: hidden;
+    margin-left: 0;
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
 }
 
 
@@ -825,22 +821,22 @@ vertical-align: middle;
 }
 
 .media .media-object {
-  transform: scale(1);
-  -webkit-transition: transform .3s ease-out;
-  -moz-transition: opacity .3s cubic-bezier(.645, .045, .355, 1), transform .5s ease-out;
-  transition: transform .3s ease-out;
+    transform: scale(1);
+    -webkit-transition: transform .3s ease-out;
+    -moz-transition: opacity .3s cubic-bezier(.645, .045, .355, 1), transform .5s ease-out;
+    transition: transform .3s ease-out;
 }
 
 .media:hover .media-object {
-  transform: scale(1.1);
+    transform: scale(1.1);
 }
 
 hr {
-  margin: 20px 0 5px;
-  border: 0;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #fff;
-  display: inline-block;
+    margin: 20px 0 5px;
+    border: 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #fff;
+    display: inline-block;
 }
 
 .row--fluid .w100 h2 {
