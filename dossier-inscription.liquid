@@ -176,7 +176,6 @@ js src: none
           {% if guest.guest_metadata.nb_accompagnants != "" %} <li class="{% if url_params.etape == 'planning_accompagnants' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 6", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li> {% endif%}
         {% endunless %}
         <li class="{% if url_params.etape == 'planning_sessions_roulage' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 7", priority: 84 %}Planning Pilote{% endeditable_text %}</a></li>
-        <li class="{% if url_params.etape == 'moniteur' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 8", priority: 84 %}Moniteurs{% endeditable_text %}</a></li>
         <li class="{% if url_params.etape == 'recapitulatif' %}active{% endif %} disabled"><a href="#">{% editable_text "Titre étape 9", priority: 84 %}Récapitulatif{% endeditable_text %}</a></li>
       </ul>
 
