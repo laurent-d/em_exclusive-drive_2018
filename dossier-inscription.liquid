@@ -112,7 +112,7 @@ js src: none
         margin-bottom: 3em;
         box-sizing: border-box;
       }
-      
+
       #total_recap h2 {
           color: #e00a1d;
           font-family: 'Montserrat', sans-serif;
@@ -759,7 +759,9 @@ Des récompenses d'exception pour les vainqueurs des 5 catégories La plus Puiss
                             {% if point.traits.jour == day and activite contains point.traits.type %}
                               {% if point.traits.radiogroup != radio_group %}
                                 <hr />
-                                <div style="clear:both;"><h3>{{ point.traits.label }}</h3></div>
+                                <!-- <div style="clear:both;"> -->
+                                  <h3>{{ point.traits.label }}</h3>
+                                <!-- </div> -->
                               {% endif %}
                               {% assign radio_group = point.traits.radiogroup %}
                               {% assign val = point.traits.heure | remove: "h" %}
@@ -865,7 +867,9 @@ Des récompenses d'exception pour les vainqueurs des 5 catégories La plus Puiss
                             {% if point.traits.jour == day and activite contains point.traits.type %}
                               {% if point.traits.radiogroup != radio_group %}
                                 <hr />
-                                <div style="clear:both;"><h3>{{ point.traits.label }}</h3></div>
+                                <!-- <div style="clear:both;"> -->
+                                  <h3>{{ point.traits.label }}</h3>
+                                <!-- </div> -->
                               {% endif %}
                               {% assign radio_group = point.traits.radiogroup %}
                               {% assign val = point.traits.heure | remove: "h" %}
@@ -953,7 +957,9 @@ Des récompenses d'exception pour les vainqueurs des 5 catégories La plus Puiss
                             {% if point.traits.jour == day and activite contains point.traits.type %}
                               {% if point.traits.radiogroup != radio_group %}
                                 <hr />
-                                <div style="clear:both;"><h3>{{ point.traits.label }}</h3></div>
+                                <!-- <div style="clear:both;"> -->
+                                  <h3>{{ point.traits.label }}</h3>
+                                <!-- </div> -->
                               {% endif %}
                               {% assign radio_group = point.traits.radiogroup %}
                               {% assign val = point.traits.heure | remove: "h" %}
